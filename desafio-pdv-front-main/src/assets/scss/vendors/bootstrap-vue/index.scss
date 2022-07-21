@@ -1,0 +1,70 @@
+/*
+Template Name: Skote - Responsive Bootstrap 4 Admin Dashboard
+Author: Themesbrand
+Version: 1.0.0
+Website: https://themesbrand.com/
+Contact: themesbrand@gmail.com
+File: Main Css File
+*/
+
+//Fonts
+@import "custom/fonts/fonts";
+
+//Core files
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "variables";
+@import "~bootstrap/scss/mixins";
+@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap';
+@import '~bootstrap-vue/src/index.scss';
+
+
+// Structure
+@import "custom/structure/general";
+@import "custom/structure/topbar";
+@import "custom/structure/page-head";
+@import "custom/structure/footer";
+@import "custom/structure/right-sidebar";
+@import "custom/structure/vertical";
+@import "custom/structure/horizontal-nav";
+@import "custom/structure/layouts";
+
+// Components
+@import "custom/components/avatar";
+@import "custom/components/helper";
+@import "custom/components/preloader";
+@import "custom/components/widgets";
+@import "custom/components/demos";
+@import "custom/components/print";
+
+
+@import "icons";
+
+// @import "custom/rtl/bootstrap-rtl";
+// @import "custom/rtl/components-rtl";
+// @import "custom/rtl/float-rtl";
+// @import "custom/rtl/general-rtl";
+// @import "custom/rtl/pages-rtl";
+// @import "custom/rtl/plugins-rtl";
+// @import "custom/rtl/spacing-rtl";
+// @import "custom/rtl/structure-rtl";
+// @import "custom/rtl/text-rtl";
+
+
+.blog-card {
+    > h5 {
+        position: absolute;
+        margin-top: 10px !important;    
+    }
+    .tabs {
+        width: 100%;
+        .card-body {
+            padding: 1.25rem 0 0;
+        }
+    }
+}
+
+.page-container {
+    padding-top: 70px;
+}
