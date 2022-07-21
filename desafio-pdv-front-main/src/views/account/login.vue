@@ -1,7 +1,7 @@
 <script>
 import Layout from "@/layout/auth";
 import appConfig from "@/app.config";
-import {mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import { required } from "vuelidate/lib/validators";
 
@@ -93,7 +93,7 @@ export default {
         await this.signIn(bodyFormData)
           .then(() => {
             this.changeLayoutDefault(true)
-            this.$router.push("/").catch(() => {});
+            this.$router.push("/").catch(() => { });
           })
           .catch(() => {
             this.isAuthError = true;
@@ -123,14 +123,9 @@ export default {
           <div class="bg-soft-primary">
             <div class="row">
               <div class="col-7 align-self-start">
-                <img
-                  src="@/assets/images/bagarote/logo_bagarote.svg"
-                  alt
-                  class="img-fluid p-4"
-                />
+                <img src="@/assets/images/bagarote/logo_bagarote.svg" alt class="img-fluid p-4" />
               </div>
-              <div
-                class="
+              <div class="
                   text-primary
                   col
                   align-self-end
@@ -139,8 +134,7 @@ export default {
                   fadeIn
                   mr-2
                   mb-1
-                "
-              >
+                ">
                 PDV
               </div>
             </div>
@@ -157,13 +151,7 @@ export default {
                 <p>Faça login para continuar</p>
               </div>
             </div>
-            <b-alert
-              v-model="isAuthError"
-              variant="danger"
-              class="mt-3"
-              dismissible
-              >{{ authError }}</b-alert
-            >
+            <b-alert v-model="isAuthError" variant="danger" class="mt-3" dismissible>{{ authError }}</b-alert>
 
             <!-- <div
               v-if="notification.message"
@@ -173,54 +161,25 @@ export default {
             </div> -->
 
             <b-form class="p-2" @submit.prevent="tryToLogIn">
-              <b-form-group
-                id="input-group-1"
-                label="Usuário"
-                label-for="input-1"
-              >
-                <b-form-input
-                  @focus.native="setFocusBackground"
-                  id="input-1"
-                  v-model="email"
-                  type="text"
-                  :class="{ 'is-invalid': submitted && $v.email.$error }"
-                ></b-form-input>
-                <div
-                  v-if="submitted && $v.email.$error"
-                  class="invalid-feedback"
-                >
+              <b-form-group id="input-group-1" label="Usuário" label-for="input-1">
+                <b-form-input @focus.native="setFocusBackground" id="input-1" v-model="email" type="text"
+                  :class="{ 'is-invalid': submitted && $v.email.$error }"></b-form-input>
+                <div v-if="submitted && $v.email.$error" class="invalid-feedback">
                   <span v-if="!$v.email.required">Email is required.</span>
                   <span v-if="!$v.email.email">Please enter valid email.</span>
                 </div>
               </b-form-group>
 
-              <b-form-group
-                id="input-group-2"
-                label="Senha"
-                label-for="input-2"
-              >
-                <b-form-input
-                  @focus.native="setFocusBackground"
-                  id="input-2"
-                  v-model="password"
-                  type="password"
-                  :class="{ 'is-invalid': submitted && $v.password.$error }"
-                ></b-form-input>
-                <div
-                  v-if="submitted && !$v.password.required"
-                  class="invalid-feedback"
-                >
+              <b-form-group id="input-group-2" label="Senha" label-for="input-2">
+                <b-form-input @focus.native="setFocusBackground" id="input-2" v-model="password" type="password"
+                  :class="{ 'is-invalid': submitted && $v.password.$error }"></b-form-input>
+                <div v-if="submitted && !$v.password.required" class="invalid-feedback">
                   Password is required.
                 </div>
               </b-form-group>
               <div class="mt-3">
-                <b-button
-                  :disabled="$v.$invalid"
-                  type="submit"
-                  :variant="btnLoginVariant"
-                  class="btn-block"
-                  >Entrar</b-button
-                >
+                <b-button :disabled="$v.$invalid" type="submit" :variant="btnLoginVariant" class="btn-block">Entrar
+                </b-button>
               </div>
             </b-form>
           </div>
@@ -246,30 +205,37 @@ export default {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @-moz-keyframes fadeIn {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @-o-keyframes fadeIn {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -278,6 +244,7 @@ export default {
 .active-item {
   background: #e5e4e2;
 }
+
 .fadeIn {
   -webkit-animation: fadeIn 3s ease-in-out;
   -moz-animation: fadeIn 3s ease-in-out;
