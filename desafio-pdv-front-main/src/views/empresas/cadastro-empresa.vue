@@ -12,7 +12,7 @@
 
                             </b-table>
                             <div class="mt-2 d-flex" style="justify-content: space-between">
-                                <span>Total de registros: {{items.length}}</span>
+                                <span>Total de registros: {{ items.length }}</span>
                             </div>
                             <hr />
                             <div class="d-flex align-items-center justify-content-center">
@@ -50,7 +50,8 @@
                                 </b-form-group>
 
                                 <b-form-group id="razao-social-group" label="Razao Social:" label-for="razao-social">
-                                    <b-form-input id="razao-social" placeholder="Carro Ponto Ltda" required></b-form-input>
+                                    <b-form-input id="razao-social" placeholder="Carro Ponto Ltda" required>
+                                    </b-form-input>
                                 </b-form-group>
                                 <b-row>
                                     <b-col>
@@ -69,27 +70,17 @@
                                 </b-row>
                             </b-form>
                         </b-card>
-                        <StateButtonBar
-        excluir
-        excluirDisabled
-        novo
-        :novoFunction="novo"
-        cancelar
-        :cancelarFunction="cancelar"
-        salvar
-        :salvarFunction="salvarVenda"
-        :oldObj="oldObj"
-        :newObj="newObj"
-        :camposObrigatorios="[
-          'cnpj',
-          'nome-fantasia',
-          'razao-social',
-          'telefone',
-          'responsavel',
-        ]"
-      />
+                        <StateButtonBar excluir excluirDisabled novo :novoFunction="novo" cancelar
+                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarVenda" :oldObj="oldObj"
+                            :newObj="newObj" :camposObrigatorios="[
+                                'cnpj',
+                                'nome-fantasia',
+                                'razao-social',
+                                'telefone',
+                                'responsavel',
+                            ]" />
                     </b-col>
-                    
+
                 </b-row>
             </div>
         </div>
@@ -108,13 +99,13 @@ export default {
         Layout,
     },
     data() {
-      return {
-        items: [
-          {name: 'Carros.com'},
-          {name: 'Mercadinho do Bairro'},
-          {name: 'Tudo Celular'}
-        ]
-      }
+        return {
+            items: [
+                { name: 'Carros.com' },
+                { name: 'Mercadinho do Bairro' },
+                { name: 'Tudo Celular' }
+            ]
+        }
     }
 }
 </script>
