@@ -7,12 +7,12 @@
                 <b-row>
                     <b-col>
                         <b-card>
-                            <b-table class="mb-0 my-table" :items="items" bordered selectable select-mode="single"
-                                selected-variant="primary" striped hover style="cursor: pointer">
+                            <b-table class="mb-0 my-table" :items="empresaResponse" bordered selectable
+                                select-mode="single" selected-variant="primary" striped hover style="cursor: pointer">
 
                             </b-table>
                             <div class="mt-2 d-flex" style="justify-content: space-between">
-                                <span>Total de registros: {{ items.length }}</span>
+                                <span>Total de registros: {{ empresaResponse.length }}</span>
                             </div>
                             <hr />
                             <div class="d-flex align-items-center justify-content-center">
@@ -91,6 +91,8 @@
 import PageHeader from "@/components/page-header";
 import StateButtonBar from "@/components/state-button-bar";
 import Layout from "@/layout/main";
+import axios from "../../plugins/axios";
+
 
 export default {
     components: {
@@ -100,12 +102,24 @@ export default {
     },
     data() {
         return {
-            items: [
-                { name: 'Carros.com' },
-                { name: 'Mercadinho do Bairro' },
-                { name: 'Tudo Celular' }
-            ]
+            empresaResponse: []
         }
+    },
+    methods: {
+        // Método getAll Empresas
+        async listEmpresas() {
+            await this.$axios
+                .get("dominios/empresa")
+                .then((response) => {
+                    this.empresaResponse = Object.assign([], response.data);
+                })
+                .catch(() => {
+                    this.$toasted.error("Falha ao listar empresas!");
+                });
+        }
+    },
+    mounted() {
+        this.listEmpresas()
     }
 }
 </script>
