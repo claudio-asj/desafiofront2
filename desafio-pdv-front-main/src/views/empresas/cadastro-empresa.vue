@@ -41,29 +41,33 @@
                         <b-card>
                             <b-form>
                                 <b-form-group id="cnpj-group" label="CNPJ:" label-for="cnpj">
-                                    <b-form-input id="cnpj" placeholder="34.916.315/0001-03" type="number" required>
+                                    <b-form-input id="cnpj" placeholder="34.916.315/0001-03" type="number" required
+                                        v-model="novaEmpresa.cnpj">
                                     </b-form-input>
                                 </b-form-group>
 
                                 <b-form-group id="nome-fantasia-group" label="Nome Fantasia:" label-for="nome-fantasia">
-                                    <b-form-input id="nome-fantasia" placeholder="Carros.com" required></b-form-input>
+                                    <b-form-input id="nome-fantasia" placeholder="Carros.com" required
+                                        v-model="novaEmpresa.nomeFantasia"></b-form-input>
                                 </b-form-group>
 
                                 <b-form-group id="razao-social-group" label="Razao Social:" label-for="razao-social">
-                                    <b-form-input id="razao-social" placeholder="Carro Ponto Ltda" required>
+                                    <b-form-input id="razao-social" placeholder="Carro Ponto Ltda" required
+                                        v-model="novaEmpresa.razaoSocial">
                                     </b-form-input>
                                 </b-form-group>
                                 <b-row>
                                     <b-col>
                                         <b-form-group id="telefone-group" label="Telefone:" label-for="telefone">
                                             <b-form-input id="telefone" placeholder="(21)99999-9999" type="phone"
-                                                required></b-form-input>
+                                                required v-model="novaEmpresa.telefone"></b-form-input>
                                         </b-form-group>
                                     </b-col>
                                     <b-col>
                                         <b-form-group id="responsavel-group" label="Responsável Legal:"
                                             label-for="responsavel">
-                                            <b-form-input id="Responsavel" placeholder="Joao da Silva" required>
+                                            <b-form-input id="Responsavel" placeholder="Joao da Silva" required
+                                                v-model="novaEmpresa.responsavelLegal">
                                             </b-form-input>
                                         </b-form-group>
                                     </b-col>
@@ -101,7 +105,14 @@ export default {
     },
     data() {
         return {
-            empresaResponse: []
+            empresaResponse: [],
+            novaEmpresa: {
+                nomeFantasia: null,
+                razaoSocial: null,
+                cnpj: null,
+                telefone: null,
+                responsavelLegal: null
+            }
         }
     },
     methods: {
@@ -114,6 +125,20 @@ export default {
                 })
                 .catch(() => {
                     this.$toasted.error("Falha ao listar empresas!");
+                });
+        },
+        // salvando empresa
+        async salvarEmpresa() {
+            let empresa = { ...this.novaEmpresa };
+
+            await this.$axios
+                .post(`empresa`, empresa)
+                .then(() => {
+                    this.$toasted.success("Venda salva com sucesso!");
+                    this.cancelar();
+                })
+                .catch(() => {
+                    this.$toasted.error("Falha ao salvar venda!");
                 });
         }
     },
