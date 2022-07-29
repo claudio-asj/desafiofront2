@@ -44,6 +44,15 @@
                         </b-card>
                     </b-col>
                 </b-row>
+                <StateButtonBar excluir excluirDisabled novo :novoFunction="novo" cancelar
+                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarProduto" :oldObj="oldObj"
+                            :newObj="newObj" :camposObrigatorios="[ //n sei
+                                'cnpj',
+                                'nome-fantasia',
+                                'razao-social',
+                                'telefone',
+                                'responsavel',
+                            ]" />
             </div>
         </div>
     </div>
@@ -51,12 +60,12 @@
 
 
 <script>
-
+import StateButtonBar from "../../components/state-button-bar.vue"
 import PageHeader from "../../components/page-header.vue";
 import Main from "../../layout/main.vue";
 
 export default {
-    components: { PageHeader, Main },
+    components: { PageHeader, Main, StateButtonBar },
     data() {
         return {
             empresaResponse: [],

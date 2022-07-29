@@ -6,7 +6,7 @@
       <div class="my-container">
         <b-card>
           <label for="empresa">Empresa</label>
-          <b-form-select class="mb-2" ref="empresa" autocomplete="off" @change="listProdutos">
+          <b-form-select class="mb-2" ref="empresa" autocomplete="off" @change="listClientes">
             <option :value="{}"></option>
             <option v-for="empresa in empresaResponse" :key="empresa.idEmpresa" :value="novoCliente.idEmpresa">
               {{ empresa.nomeFantasia }}
@@ -16,7 +16,7 @@
         <b-row>
           <b-col>
             <b-card>
-              <b-table class="mb-0 my-table" :items="produtoResponse" bordered selectable select-mode="single"
+              <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single"
                 selected-variant="primary" striped hover style="cursor: pointer">
 
               </b-table>
@@ -43,6 +43,15 @@
             </b-card>
           </b-col>
         </b-row>
+        <StateButtonBar excluir excluirDisabled novo :novoFunction="novo" cancelar
+                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarCliente" :oldObj="oldObj"
+                            :newObj="newObj" :camposObrigatorios="[ //n sei
+                                'cnpj',
+                                'nome-fantasia',
+                                'razao-social',
+                                'telefone',
+                                'responsavel',
+                            ]" />
       </div>
     </div>
   </div>
@@ -50,19 +59,19 @@
 
 
 <script>
-
+import StateButtonBar from "../../components/state-button-bar.vue"
 import PageHeader from "../../components/page-header.vue";
 import Main from "../../layout/main.vue";
 
 export default {
-  components: { PageHeader, Main },
+  components: { PageHeader, Main, StateButtonBar },
   data() {
     return {
-      empresaResponse: [],
-      produtoResponse: [],
+      clienteResponse: [],
+      empresaResponse:[],
       // Objeto da venda a ser salva
       novoCliente: {
-        idEmpresa: 1,
+        idEmpresa: null,
         idCliente: null,
         dataVenda: null,
         metodoPagamento: null,
@@ -82,18 +91,19 @@ export default {
           this.$toasted.error("Falha ao listar empresas!");
         });
     },
-    // Método getAll Produtos
-    async listProdutos(idEmpresa) {
+    // Método getAll Clientes
+    async listClientes(idEmpresa) {
+      this.listProdutos(idEmpresa);
       await this.$axios
-        .get(`dominios/empresa/${idEmpresa}/produto`)
+        .get(`dominios/empresa/${idEmpresa}/cliente`)
         .then((response) => {
-          this.produtoResponse = Object.assign([], response.data);
+          this.clienteResponse = Object.assign([], response.data);
         })
         .catch(() => {
-          this.$toasted.error("Falha ao listar produtos!");
+          this.$toasted.error("Falha ao listar clientes!");
         });
     }
-  },
+    },
   mounted() {
     this.listEmpresas();
   }

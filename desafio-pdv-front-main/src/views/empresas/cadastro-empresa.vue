@@ -71,7 +71,7 @@
                             </b-form>
                         </b-card>
                         <StateButtonBar excluir excluirDisabled novo :novoFunction="novo" cancelar
-                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarVenda" :oldObj="oldObj"
+                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarEmpresa" :oldObj="oldObj"
                             :newObj="newObj" :camposObrigatorios="[
                                 'cnpj',
                                 'nome-fantasia',
