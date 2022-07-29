@@ -91,7 +91,6 @@
 import PageHeader from "@/components/page-header";
 import StateButtonBar from "@/components/state-button-bar";
 import Layout from "@/layout/main";
-import axios from "../../plugins/axios";
 
 
 export default {
