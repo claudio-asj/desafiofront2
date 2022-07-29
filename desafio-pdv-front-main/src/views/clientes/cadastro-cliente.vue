@@ -8,7 +8,7 @@
           <label for="empresa">Empresa</label>
           <b-form-select class="mb-2" ref="empresa" autocomplete="off" @change="listProdutos">
             <option :value="{}"></option>
-            <option v-for="empresa in empresaResponse" :key="empresa.idEmpresa" :value="novoCliente.idEmpresa" >
+            <option v-for="empresa in empresaResponse" :key="empresa.idEmpresa" :value="novoCliente.idEmpresa">
               {{ empresa.nomeFantasia }}
             </option>
           </b-form-select>
@@ -23,7 +23,24 @@
             </b-card>
           </b-col>
           <b-col>
-            <b-card>oi2</b-card>
+            <b-card>
+              <b-form>
+                <b-form-group id="cpf-group" label="CPF" label-for="cpf">
+                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" type="number" required>
+                </b-form-input>
+                </b-form-group>
+
+                <b-form-group id="nome-group" label="Nome" label-for="nome">
+                  <b-form-input id="nome" placeholder="José Araujo" required>
+                </b-form-input>
+                </b-form-group>
+
+                <b-form-group id="telefone-group" label="Telefone" label-for="telefone">
+                  <b-form-input id="telefone" placeholder="(21) 99999-9999" type="number" required>
+                </b-form-input>
+                </b-form-group>
+              </b-form>
+            </b-card>
           </b-col>
         </b-row>
       </div>
@@ -43,7 +60,7 @@ export default {
     return {
       empresaResponse: [],
       produtoResponse: [],
-       // Objeto da venda a ser salva
+      // Objeto da venda a ser salva
       novoCliente: {
         idEmpresa: 1,
         idCliente: null,
