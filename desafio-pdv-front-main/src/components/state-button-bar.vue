@@ -652,9 +652,7 @@ export default {
 
 <template>
   <div>
-    <b-row
-      v-if="windowWidth >= 500"
-      class="
+    <b-row v-if="windowWidth >= 500" class="
         footer
         position-fixed
         d-flex
@@ -662,332 +660,99 @@ export default {
         justify-content-center
         align-items-center
         desktop-footer
-      "
-      :class="{ 'desktop-footer-collapsed': menuCollapsed }"
-      style="z-index: 3"
-    >
+      " :class="{ 'desktop-footer-collapsed': menuCollapsed }" style="z-index: 3">
       <b-col cols="4">
-        <b-button
-          v-if="excluir"
-          id="excluir-btn"
-          :variant="btnExcluir.variant"
-          :disabled="btnExcluir.disabled"
-          @click="excluirFunction"
-          ><i class="bx bx-trash-alt align-middle mr-1"></i>Excluir</b-button
-        >
+        <b-button v-if="excluir" id="excluir-btn" :variant="btnExcluir.variant" :disabled="btnExcluir.disabled"
+          @click="excluirFunction"><i class="bx bx-trash-alt align-middle mr-1"></i>Excluir</b-button>
       </b-col>
       <b-col cols="8" class="d-flex justify-content-end">
-        <b-button
-          v-if="novo"
-          id="novo-btn"
-          class="ml-2"
-          :variant="btnNovo.variant"
-          :disabled="btnNovo.disabled"
-          @click="novoFunction"
-          ><i class="bx bx-plus align-middle mr-1"></i>Novo</b-button
-        >
+        <b-button v-if="novo" id="novo-btn" class="ml-2" :variant="btnNovo.variant" :disabled="btnNovo.disabled"
+          @click="novoFunction"><i class="bx bx-plus align-middle mr-1"></i>Novo</b-button>
         <!-- Secondary buttons -->
-        <b-button
-          v-if="cancelar"
-          id="cancelar-btn"
-          class="ml-2"
-          :variant="btnCancelar.variant"
-          :disabled="btnCancelar.disabled"
-          @click="cancelarFunction"
-          ><i class="bx bx-x align-middle mr-1"></i>Cancelar</b-button
-        >
-        <b-button
-          v-if="editar"
-          id="editar-btn"
-          class="ml-2"
-          :variant="editarVariant"
-          :disabled="editarDisabled"
-          @click="editarFunction"
-          ><i class="bx bx-pencil align-middle mr-1"></i>Editar</b-button
-        >
-        <b-button
-          v-if="anterior"
-          id="anterior-btn"
-          class="ml-2"
-          :variant="anteriorVariant"
-          :disabled="anteriorDisabled"
-          @click="anteriorFunction"
-          ><i class="bx bx-chevron-left align-middle mr-1"></i
-          >Anterior</b-button
-        >
-        <b-button
-          v-if="proximo"
-          id="proximo-btn"
-          class="ml-2"
-          :variant="proximoVariant"
-          :disabled="proximoDisabled"
-          @click="proximoFunction"
-          ><i class="bx bx-chevron-right align-middle ml-1"></i
-          >Próximo</b-button
-        >
-        <b-button
-          v-if="finalizar"
-          id="finalizar-btn"
-          class="ml-2"
-          :variant="finalizarVariant"
-          :disabled="finalizarDisabled"
-          @click="finalizarFunction"
-          ><i class="bx bx-check align-middle mr-1"></i>Finalizar</b-button
-        >
-        <b-button
-          v-if="verDetalhe"
-          id="ver-detalhe-btn"
-          class="ml-2"
-          :variant="verDetalheVariant"
-          :disabled="verDetalheDisabled"
-          @click="verDetalheFunction"
-          ><i class="bx bx-search-alt-2 align-middle mr-1"></i>Ver
-          detalhe</b-button
-        >
-        <b-button
-          v-if="atualizar"
-          id="atualizar-btn"
-          class="ml-2"
-          :variant="atualizarVariant"
-          :disabled="atualizarDisabled"
-          @click="atualizarFunction"
-          ><i class="bx bx-sync align-middle mr-1"></i>Atualizar</b-button
-        >
-        <b-button
-          v-if="imprimir"
-          id="imprimir-btn"
-          class="ml-2"
-          :variant="imprimirVariant"
-          :disabled="imprimirDisabled"
-          @click="imprimirFunction"
-          ><i class="bx bx-printer align-middle mr-1"></i>Imprimir</b-button
-        >
-        <b-button
-          v-if="buscar"
-          id="buscar-btn"
-          class="ml-2"
-          :variant="buscarVariant"
-          :disabled="buscarDisabled"
-          @click="buscarFunction"
-          ><i class="bx bx-search-alt align-middle mr-1"></i>Buscar</b-button
-        >
-        <b-button
-          v-if="filtrar"
-          id="filtrar-btn"
-          class="ml-2"
-          :variant="filtrarVariant"
-          :disabled="filtrarDisabled"
-          @click="filtrarFunction"
-          ><i class="bx bx-filter-alt align-middle mr-1"></i>Filtrar</b-button
-        >
-        <b-button
-          v-if="baixar"
-          id="baixar-btn"
-          class="ml-2"
-          :variant="baixarVariant"
-          :disabled="baixarDisabled"
-          @click="baixarFunction"
-          ><i class="bx bx-download align-middle mr-1"></i>Baixar</b-button
-        >
-        <b-button
-          v-if="sincronizar"
-          id="sincronizar-btn"
-          class="ml-2"
-          :variant="sincronizarVariant"
-          :disabled="sincronizarDisabled"
-          @click="sincronizarFunction"
-          ><i class="bx bx-repost align-middle mr-1"></i>Sincronizar</b-button
-        >
-        <b-button
-          v-if="verImagens"
-          id="ver-imagens-btn"
-          class="ml-2"
-          :variant="verImagensVariant"
-          :disabled="verImagensDisabled"
-          @click="verImagensFunction"
-          ><i class="bx bx-repost align-middle mr-1"></i>Ver imagens</b-button
-        >
-        <b-button
-          v-if="adicionar"
-          id="adicionar-btn"
-          class="ml-2"
-          :variant="adicionarVariant"
-          :disabled="adicionarDisabled"
-          @click="adicionarFunction"
-          ><i class="bx bx-image-add align-middle mr-1"></i>Adicionar</b-button
-        >
-        <b-button
-          v-if="ampliar"
-          id="ampliar-btn"
-          class="ml-2"
-          :variant="ampliarVariant"
-          :disabled="ampliarDisabled"
-          @click="ampliarFunction"
-          ><i class="bx bx-zoom-in align-middle mr-1"></i>Ampliar</b-button
-        >
-        <b-button
-          v-if="diminuir"
-          id="diminuir-btn"
-          class="ml-2"
-          :variant="diminuirVariant"
-          :disabled="diminuirDisabled"
-          @click="diminuirFunction"
-          ><i class="bx bx-zoom-out align-middle mr-1"></i>Diminuir</b-button
-        >
-        <b-button
-          v-if="expandir"
-          id="expandir-btn"
-          class="ml-2"
-          :variant="expandirVariant"
-          :disabled="expandirDisabled"
-          @click="expandirFunction"
-          ><i class="bx bx-expand align-middle mr-1"></i>Expandir</b-button
-        >
-        <b-button
-          v-if="bloquear"
-          id="bloquear-btn"
-          class="ml-2"
-          :variant="bloquearVariant"
-          :disabled="bloquearDisabled"
-          @click="bloquearFunction"
-          ><i class="bx bx-block align-middle mr-1"></i>Bloquear</b-button
-        >
-        <b-button
-          v-if="resetarSenha"
-          id="resetar-senha-btn"
-          class="ml-2"
-          :variant="resetarSenhaVariant"
-          :disabled="resetarSenhaDisabled"
-          @click="resetarSenhaFunction"
-          ><i class="bx bx-reset align-middle mr-1"></i>Resetar senha</b-button
-        >
-        <b-button
-          v-if="trocarSenha"
-          id="trocar-senha-btn"
-          class="ml-2"
-          :variant="trocarSenhaVariant"
-          :disabled="trocarSenhaDisabled"
-          @click="trocarSenhaFunction"
-          ><i class="bx bx-reset align-middle mr-1"></i>Trocar senha</b-button
-        >
-        <b-button
-          v-if="voltar"
-          id="voltar-btn"
-          class="ml-2"
-          :variant="voltarVariant"
-          :disabled="voltarDisabled"
-          @click="voltarFunction"
-          ><i class="bx bx-undo align-middle mr-1"></i>Voltar</b-button
-        >
-        <b-button
-          v-if="limpar"
-          id="limpar-btn"
-          class="ml-2"
-          :variant="limparVariant"
-          :disabled="limparDisabled"
-          @click="limparFunction"
-          ><i class="bx bx-x align-middle mr-1"></i>Limpar</b-button
-        >
-        <b-button
-          v-if="opcoes"
-          id="opcoes-btn"
-          class="ml-2"
-          :variant="opcoesVariant"
-          :disabled="opcoesDisabled"
-          @click="opcoesFunction"
-          ><i class="bx bx-dots-vertical-rounded align-middle mr-1"></i
-          >Opções</b-button
-        >
-        <b-button
-          v-if="visualizar"
-          id="visualizar-btn"
-          class="ml-2"
-          :variant="visualizarVariant"
-          :disabled="visualizarDisabled"
-          @click="visualizarFunction"
-          ><i class="bx bx-show-alt align-middle mr-1"></i>Visualizar</b-button
-        >
-        <b-button
-          v-if="arquivar"
-          id="arquivar-btn"
-          class="ml-2"
-          :variant="arquivarVariant"
-          :disabled="arquivarDisabled"
-          @click="arquivarFunction"
-          ><i class="bx bx-box align-middle mr-1"></i>Arquivar</b-button
-        >
-        <b-button
-          v-if="verHistorico"
-          id="ver-historico-btn"
-          class="ml-2"
-          :variant="verHistoricoVariant"
-          :disabled="verHistoricoDisabled"
-          @click="verHistoricoFunction"
-          ><i class="bx bx-history align-middle mr-1"></i>Ver
-          histórico</b-button
-        >
-        <b-button
-          v-if="agendar"
-          id="agendar-btn"
-          class="ml-2"
-          :variant="agendarVariant"
-          :disabled="agendarDisabled"
-          @click="agendarFunction"
-          ><i class="bx bx-calendar-check align-middle mr-1"></i
-          >Agendar</b-button
-        >
-        <b-button
-          v-if="configuracoes"
-          id="configuracoes-btn"
-          class="ml-2"
-          :variant="configuracoesVariant"
-          :disabled="configuracoesDisabled"
-          @click="configuracoesFunction"
-          ><i class="bx bx-slider-alt align-middle mr-1"></i
-          >Configurações</b-button
-        >
-        <b-button
-          v-if="desvincular"
-          id="sair-btn"
-          class="ml-2"
-          :variant="desvincularVariant"
-          :disabled="desvincularDisabled"
-          @click="desvincularFunction"
-          ><i class="bx bx-x align-middle mr-1"></i>Desvincular</b-button
-        >
-        <b-button
-          v-if="vincular"
-          id="vincular-btn"
-          class="ml-2"
-          :variant="vincularVariant"
-          :disabled="vincularDisabled"
-          @click="vincularFunction"
-          ><i class="bx bx-check align-middle mr-1"></i>Vincular</b-button
-        >
-        <b-button
-          v-if="sair"
-          id="sair-btn"
-          class="ml-2"
-          :variant="sairVariant"
-          :disabled="sairDisabled"
-          @click="sairFunction"
-          ><i class="bx bx-log-out align-middle mr-1"></i>Sair</b-button
-        >
+        <b-button v-if="cancelar" id="cancelar-btn" class="ml-2" :variant="btnCancelar.variant"
+          :disabled="btnCancelar.disabled" @click="cancelarFunction"><i class="bx bx-x align-middle mr-1"></i>Cancelar
+        </b-button>
+        <b-button v-if="editar" id="editar-btn" class="ml-2" :variant="editarVariant" :disabled="editarDisabled"
+          @click="editarFunction"><i class="bx bx-pencil align-middle mr-1"></i>Editar</b-button>
+        <b-button v-if="anterior" id="anterior-btn" class="ml-2" :variant="anteriorVariant" :disabled="anteriorDisabled"
+          @click="anteriorFunction"><i class="bx bx-chevron-left align-middle mr-1"></i>Anterior</b-button>
+        <b-button v-if="proximo" id="proximo-btn" class="ml-2" :variant="proximoVariant" :disabled="proximoDisabled"
+          @click="proximoFunction"><i class="bx bx-chevron-right align-middle ml-1"></i>Próximo</b-button>
+        <b-button v-if="finalizar" id="finalizar-btn" class="ml-2" :variant="finalizarVariant"
+          :disabled="finalizarDisabled" @click="finalizarFunction"><i
+            class="bx bx-check align-middle mr-1"></i>Finalizar</b-button>
+        <b-button v-if="verDetalhe" id="ver-detalhe-btn" class="ml-2" :variant="verDetalheVariant"
+          :disabled="verDetalheDisabled" @click="verDetalheFunction"><i
+            class="bx bx-search-alt-2 align-middle mr-1"></i>Ver
+          detalhe</b-button>
+        <b-button v-if="atualizar" id="atualizar-btn" class="ml-2" :variant="atualizarVariant"
+          :disabled="atualizarDisabled" @click="atualizarFunction"><i class="bx bx-sync align-middle mr-1"></i>Atualizar
+        </b-button>
+        <b-button v-if="imprimir" id="imprimir-btn" class="ml-2" :variant="imprimirVariant" :disabled="imprimirDisabled"
+          @click="imprimirFunction"><i class="bx bx-printer align-middle mr-1"></i>Imprimir</b-button>
+        <b-button v-if="buscar" id="buscar-btn" class="ml-2" :variant="buscarVariant" :disabled="buscarDisabled"
+          @click="buscarFunction"><i class="bx bx-search-alt align-middle mr-1"></i>Buscar</b-button>
+        <b-button v-if="filtrar" id="filtrar-btn" class="ml-2" :variant="filtrarVariant" :disabled="filtrarDisabled"
+          @click="filtrarFunction"><i class="bx bx-filter-alt align-middle mr-1"></i>Filtrar</b-button>
+        <b-button v-if="baixar" id="baixar-btn" class="ml-2" :variant="baixarVariant" :disabled="baixarDisabled"
+          @click="baixarFunction"><i class="bx bx-download align-middle mr-1"></i>Baixar</b-button>
+        <b-button v-if="sincronizar" id="sincronizar-btn" class="ml-2" :variant="sincronizarVariant"
+          :disabled="sincronizarDisabled" @click="sincronizarFunction"><i
+            class="bx bx-repost align-middle mr-1"></i>Sincronizar</b-button>
+        <b-button v-if="verImagens" id="ver-imagens-btn" class="ml-2" :variant="verImagensVariant"
+          :disabled="verImagensDisabled" @click="verImagensFunction"><i class="bx bx-repost align-middle mr-1"></i>Ver
+          imagens</b-button>
+        <b-button v-if="adicionar" id="adicionar-btn" class="ml-2" :variant="adicionarVariant"
+          :disabled="adicionarDisabled" @click="adicionarFunction"><i
+            class="bx bx-image-add align-middle mr-1"></i>Adicionar</b-button>
+        <b-button v-if="ampliar" id="ampliar-btn" class="ml-2" :variant="ampliarVariant" :disabled="ampliarDisabled"
+          @click="ampliarFunction"><i class="bx bx-zoom-in align-middle mr-1"></i>Ampliar</b-button>
+        <b-button v-if="diminuir" id="diminuir-btn" class="ml-2" :variant="diminuirVariant" :disabled="diminuirDisabled"
+          @click="diminuirFunction"><i class="bx bx-zoom-out align-middle mr-1"></i>Diminuir</b-button>
+        <b-button v-if="expandir" id="expandir-btn" class="ml-2" :variant="expandirVariant" :disabled="expandirDisabled"
+          @click="expandirFunction"><i class="bx bx-expand align-middle mr-1"></i>Expandir</b-button>
+        <b-button v-if="bloquear" id="bloquear-btn" class="ml-2" :variant="bloquearVariant" :disabled="bloquearDisabled"
+          @click="bloquearFunction"><i class="bx bx-block align-middle mr-1"></i>Bloquear</b-button>
+        <b-button v-if="resetarSenha" id="resetar-senha-btn" class="ml-2" :variant="resetarSenhaVariant"
+          :disabled="resetarSenhaDisabled" @click="resetarSenhaFunction"><i
+            class="bx bx-reset align-middle mr-1"></i>Resetar senha</b-button>
+        <b-button v-if="trocarSenha" id="trocar-senha-btn" class="ml-2" :variant="trocarSenhaVariant"
+          :disabled="trocarSenhaDisabled" @click="trocarSenhaFunction"><i
+            class="bx bx-reset align-middle mr-1"></i>Trocar senha</b-button>
+        <b-button v-if="voltar" id="voltar-btn" class="ml-2" :variant="voltarVariant" :disabled="voltarDisabled"
+          @click="voltarFunction"><i class="bx bx-undo align-middle mr-1"></i>Voltar</b-button>
+        <b-button v-if="limpar" id="limpar-btn" class="ml-2" :variant="limparVariant" :disabled="limparDisabled"
+          @click="limparFunction"><i class="bx bx-x align-middle mr-1"></i>Limpar</b-button>
+        <b-button v-if="opcoes" id="opcoes-btn" class="ml-2" :variant="opcoesVariant" :disabled="opcoesDisabled"
+          @click="opcoesFunction"><i class="bx bx-dots-vertical-rounded align-middle mr-1"></i>Opções</b-button>
+        <b-button v-if="visualizar" id="visualizar-btn" class="ml-2" :variant="visualizarVariant"
+          :disabled="visualizarDisabled" @click="visualizarFunction"><i
+            class="bx bx-show-alt align-middle mr-1"></i>Visualizar</b-button>
+        <b-button v-if="arquivar" id="arquivar-btn" class="ml-2" :variant="arquivarVariant" :disabled="arquivarDisabled"
+          @click="arquivarFunction"><i class="bx bx-box align-middle mr-1"></i>Arquivar</b-button>
+        <b-button v-if="verHistorico" id="ver-historico-btn" class="ml-2" :variant="verHistoricoVariant"
+          :disabled="verHistoricoDisabled" @click="verHistoricoFunction"><i
+            class="bx bx-history align-middle mr-1"></i>Ver
+          histórico</b-button>
+        <b-button v-if="agendar" id="agendar-btn" class="ml-2" :variant="agendarVariant" :disabled="agendarDisabled"
+          @click="agendarFunction"><i class="bx bx-calendar-check align-middle mr-1"></i>Agendar</b-button>
+        <b-button v-if="configuracoes" id="configuracoes-btn" class="ml-2" :variant="configuracoesVariant"
+          :disabled="configuracoesDisabled" @click="configuracoesFunction"><i
+            class="bx bx-slider-alt align-middle mr-1"></i>Configurações</b-button>
+        <b-button v-if="desvincular" id="sair-btn" class="ml-2" :variant="desvincularVariant"
+          :disabled="desvincularDisabled" @click="desvincularFunction"><i
+            class="bx bx-x align-middle mr-1"></i>Desvincular</b-button>
+        <b-button v-if="vincular" id="vincular-btn" class="ml-2" :variant="vincularVariant" :disabled="vincularDisabled"
+          @click="vincularFunction"><i class="bx bx-check align-middle mr-1"></i>Vincular</b-button>
+        <b-button v-if="sair" id="sair-btn" class="ml-2" :variant="sairVariant" :disabled="sairDisabled"
+          @click="sairFunction"><i class="bx bx-log-out align-middle mr-1"></i>Sair</b-button>
 
-        <b-button
-          v-if="salvar"
-          id="salvar-btn"
-          class="ml-2"
-          :variant="btnSalvar.variant"
-          :disabled="btnSalvar.disabled"
-          @click="salvarFunction"
-          ><i class="bx bx-check align-middle mr-1"></i>Salvar</b-button
-        >
+        <b-button v-if="salvar" id="salvar-btn" class="ml-2" :variant="btnSalvar.variant" :disabled="btnSalvar.disabled"
+          @click="salvarFunction"><i class="bx bx-check align-middle mr-1"></i>Salvar</b-button>
       </b-col>
     </b-row>
     <div v-else style="height: 200px;">
-      <b-row
-        class="
+      <b-row class="
           footer
           d-flex
           flex-row
@@ -995,48 +760,19 @@ export default {
           justify-content-center
           align-items-center
           mobile-footer
-        "
-        style="z-index: 3; height: auto; width: auto; margin: 0;"
-      >
-        <b-button
-          block
-          v-if="excluir"
-          id="excluir-btn"
-          :variant="btnExcluir.variant"
-          :disabled="btnExcluir.disabled"
-          @click="excluirFunction"
-          ><i class="bx bx-trash-alt align-middle mr-1"></i>Excluir</b-button
-        >
+        " style="z-index: 3; height: auto; width: auto; margin: 0;">
+        <b-button block v-if="excluir" id="excluir-btn" :variant="btnExcluir.variant" :disabled="btnExcluir.disabled"
+          @click="excluirFunction"><i class="bx bx-trash-alt align-middle mr-1"></i>Excluir</b-button>
 
-        <b-button
-          block
-          v-if="novo"
-          id="novo-btn"
-          :variant="btnNovo.variant"
-          :disabled="btnNovo.disabled"
-          @click="novoFunction"
-          ><i class="bx bx-plus align-middle mr-1"></i>Novo</b-button
-        >
+        <b-button block v-if="novo" id="novo-btn" :variant="btnNovo.variant" :disabled="btnNovo.disabled"
+          @click="novoFunction"><i class="bx bx-plus align-middle mr-1"></i>Novo</b-button>
 
-        <b-button
-          block
-          v-if="cancelar"
-          id="cancelar-btn"
-          :variant="btnCancelar.variant"
-          :disabled="btnCancelar.disabled"
-          @click="cancelarFunction"
-          ><i class="bx bx-x align-middle mr-1"></i>Cancelar</b-button
-        >
+        <b-button block v-if="cancelar" id="cancelar-btn" :variant="btnCancelar.variant"
+          :disabled="btnCancelar.disabled" @click="cancelarFunction"><i class="bx bx-x align-middle mr-1"></i>Cancelar
+        </b-button>
 
-        <b-button
-          block
-          v-if="salvar"
-          id="salvar-btn"
-          :variant="btnSalvar.variant"
-          :disabled="btnSalvar.disabled"
-          @click="salvarFunction"
-          ><i class="bx bx-check align-middle mr-1"></i>Salvar</b-button
-        >
+        <b-button block v-if="salvar" id="salvar-btn" :variant="btnSalvar.variant" :disabled="btnSalvar.disabled"
+          @click="salvarFunction"><i class="bx bx-check align-middle mr-1"></i>Salvar</b-button>
       </b-row>
     </div>
   </div>
@@ -1049,6 +785,7 @@ export default {
   transition: 0.5s;
   transition-property: margin-left;
 }
+
 .desktop-footer-collapsed {
   margin-left: -190px;
 }

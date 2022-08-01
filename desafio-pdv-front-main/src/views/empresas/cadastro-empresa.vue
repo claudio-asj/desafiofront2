@@ -2,7 +2,7 @@
     <div>
         <Layout />
         <div class="page-container">
-            <PageHeader title="Cadastro de Empresa" helpTitle="Cadastro de Empresa"  />
+            <PageHeader title="Cadastro de Empresa" helpTitle="Cadastro de Empresa" />
             <div class="my-container">
                 <b-row>
                     <b-col>
@@ -17,7 +17,7 @@
                             <hr />
                             <div class="d-flex align-items-center justify-content-center">
                                 <ul class="pagination mb-0">
-                                    <b-pagination >
+                                    <b-pagination>
                                         <template>
                                             <div slot="first-text">
                                                 <i class="fas fa-angle-double-left"></i>
@@ -59,8 +59,8 @@
                                 <b-row>
                                     <b-col>
                                         <b-form-group id="telefone-group" label="Telefone:" label-for="telefone">
-                                            <b-form-input id="telefone" placeholder="(21)99999-9999" type="tel"
-                                                required v-model="novaEmpresa.telefone"></b-form-input>
+                                            <b-form-input id="telefone" placeholder="(21)99999-9999" type="tel" required
+                                                v-model="novaEmpresa.telefone"></b-form-input>
                                         </b-form-group>
                                     </b-col>
                                     <b-col>
@@ -74,14 +74,18 @@
                                 </b-row>
                             </b-form>
                         </b-card>
-                        <StateButtonBar excluir excluirDisabled novo :novoFunction="salvarEmpresa" cancelar
-                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarEmpresa" :camposObrigatorios="[
-                                'cnpj',
-                                'nome-fantasia',
-                                'razao-social',
-                                'telefone',
-                                'responsavel',
-                            ]" />
+                        <b-row class="footer position-fixed d-flex justify-content-center  desktop-footer">
+                            <b-col>
+                                <b-button variant="danger">Excluir</b-button>
+                            </b-col>
+                            <b-col class="d-flex justify-content-end">
+                                <div>
+                                    <b-button class="mx-2" variant="outline-info">Novo</b-button>
+                                    <b-button class="mx-2" variant="outline-warning">Cancelar</b-button>
+                                    <b-button class="ml-2" variant="outline-success">Salvar</b-button>
+                                </div>
+                            </b-col>
+                        </b-row>
                     </b-col>
 
                 </b-row>
@@ -127,8 +131,18 @@ export default {
                 });
         },
 
-        novo() { },
-        cancelar() { },
+        novo() {
+
+        },
+        cancelar() {
+            this.novaEmpresa = {
+                nomeFantasia: null,
+                razaoSocial: null,
+                cnpj: null,
+                telefone: null,
+                responsavelLegal: null
+            }
+        },
         // salvando empresa
         async salvarEmpresa() {
             let empresa = { ...this.novaEmpresa };
@@ -143,6 +157,7 @@ export default {
                 .catch(() => {
                     this.$toasted.error("Falha ao salvar empresa!");
                     console.log("nao foi");
+                    console.log(this.novaEmpresa);
                 });
         }
     },

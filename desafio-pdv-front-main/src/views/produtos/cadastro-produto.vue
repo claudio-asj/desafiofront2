@@ -37,7 +37,7 @@
                                 </b-form-group>
 
                                 <b-form-group id="valor-group" label="Valor" label-for="valor">
-                                    <b-form-input id="valor" placeholder="90000"novo type="number" required>
+                                    <b-form-input id="valor" placeholder="90000" novo type="number" required>
                                     </b-form-input>
                                 </b-form-group>
                             </b-form>
