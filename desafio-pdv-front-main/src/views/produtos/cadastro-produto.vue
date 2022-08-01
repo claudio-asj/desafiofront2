@@ -32,7 +32,7 @@
                                 </b-form-group>
 
                                 <b-form-group id="descricao-group" label="Nome" label-for="nome">
-                                    <b-form-textarea id="descricap" v-model="descricao" placeholder="..."
+                                    <b-form-textarea id="descricao" v-model="descricao" placeholder="..."
                                         rows="3" max-rows="6"></b-form-textarea>
                                 </b-form-group>
 
@@ -47,11 +47,9 @@
                 <StateButtonBar excluir excluirDisabled novo :novoFunction="novo" cancelar
                             :cancelarFunction="cancelar" salvar :salvarFunction="salvarProduto" :oldObj="oldObj"
                             :newObj="newObj" :camposObrigatorios="[ //n sei
-                                'cnpj',
-                                'nome-fantasia',
-                                'razao-social',
-                                'telefone',
-                                'responsavel',
+                                'produto',
+                                'descricao',
+                                'valor'
                             ]" />
             </div>
         </div>
