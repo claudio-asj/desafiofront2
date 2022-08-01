@@ -134,11 +134,11 @@ export default {
             await this.$axios
                 .post(`empresa`, empresa)
                 .then(() => {
-                    this.$toasted.success("Venda salva com sucesso!");
+                    this.$toasted.success("Empresa salva com sucesso!");
                     this.cancelar();
                 })
                 .catch(() => {
-                    this.$toasted.error("Falha ao salvar venda!");
+                    this.$toasted.error("Falha ao salvar empresa!");
                 });
         }
     },

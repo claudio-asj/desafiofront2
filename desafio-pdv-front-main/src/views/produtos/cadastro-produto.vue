@@ -102,6 +102,20 @@ export default {
                 .catch(() => {
                     this.$toasted.error("Falha ao listar produtos!");
                 });
+        },
+         // salvando produto
+        async salvarProduto() {
+            let produto = { ...this.novoProduto };
+
+            await this.$axios
+                .post(`produto`, produto)
+                .then(() => {
+                    this.$toasted.success("Produto salvo com sucesso!");
+                    this.cancelar();
+                })
+                .catch(() => {
+                    this.$toasted.error("Falha ao salvar produto!");
+                });
         }
     },
     mounted() {
