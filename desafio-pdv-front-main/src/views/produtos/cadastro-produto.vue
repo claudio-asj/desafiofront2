@@ -37,7 +37,7 @@
                                 </b-form-group>
 
                                 <b-form-group id="valor-group" label="Valor" label-for="valor">
-                                    <b-form-input id="valor" placeholder="90000" type="number" required>
+                                    <b-form-input id="valor" placeholder="90000"novo type="number" required>
                                     </b-form-input>
                                 </b-form-group>
                             </b-form>
@@ -101,6 +101,13 @@ export default {
                     this.$toasted.error("Falha ao listar produtos!");
                 });
         },
+        
+    novo() {
+      this.cancelar();
+      setTimeout(() => {
+        this.$refs.empresa.focus();
+      });
+    },
          // salvando produto
         async salvarProduto() {
             let produto = { ...this.novoProduto };

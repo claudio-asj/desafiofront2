@@ -2,7 +2,7 @@
     <div>
         <Layout />
         <div class="page-container">
-            <PageHeader title="Cadastro de Empresa" helpTitle="Cadastro de Empresa" :helpText="helpText" />
+            <PageHeader title="Cadastro de Empresa" helpTitle="Cadastro de Empresa"  />
             <div class="my-container">
                 <b-row>
                     <b-col>
@@ -17,7 +17,7 @@
                             <hr />
                             <div class="d-flex align-items-center justify-content-center">
                                 <ul class="pagination mb-0">
-                                    <b-pagination v-model="currentPage">
+                                    <b-pagination >
                                         <template>
                                             <div slot="first-text">
                                                 <i class="fas fa-angle-double-left"></i>
@@ -59,7 +59,7 @@
                                 <b-row>
                                     <b-col>
                                         <b-form-group id="telefone-group" label="Telefone:" label-for="telefone">
-                                            <b-form-input id="telefone" placeholder="(21)99999-9999" type="phone"
+                                            <b-form-input id="telefone" placeholder="(21)99999-9999" type="tel"
                                                 required v-model="novaEmpresa.telefone"></b-form-input>
                                         </b-form-group>
                                     </b-col>
@@ -74,9 +74,8 @@
                                 </b-row>
                             </b-form>
                         </b-card>
-                        <StateButtonBar excluir excluirDisabled novo :novoFunction="novo" cancelar
-                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarEmpresa" :oldObj="oldObj"
-                            :newObj="newObj" :camposObrigatorios="[
+                        <StateButtonBar excluir excluirDisabled novo :novoFunction="salvarEmpresa" cancelar
+                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarEmpresa" :camposObrigatorios="[
                                 'cnpj',
                                 'nome-fantasia',
                                 'razao-social',
@@ -127,6 +126,9 @@ export default {
                     this.$toasted.error("Falha ao listar empresas!");
                 });
         },
+
+        novo() { },
+        cancelar() { },
         // salvando empresa
         async salvarEmpresa() {
             let empresa = { ...this.novaEmpresa };
@@ -135,15 +137,18 @@ export default {
                 .post(`empresa`, empresa)
                 .then(() => {
                     this.$toasted.success("Empresa salva com sucesso!");
+                    console.log("foi");
                     this.cancelar();
                 })
                 .catch(() => {
                     this.$toasted.error("Falha ao salvar empresa!");
+                    console.log("nao foi");
                 });
         }
     },
     mounted() {
         this.listEmpresas()
-    }
+    },
+
 }
 </script>
