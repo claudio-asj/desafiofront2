@@ -2,22 +2,18 @@
   <div>
     <Main />
     <div class="page-container">
-      <PageHeader title="Cadastro de Cliente" helpTitle="Cadastro de Empresa" :helpText="helpText" />
+      <PageHeader title="Cadastro de Cliente" />
       <div class="my-container">
         <b-card>
           <label for="empresa">Empresa</label>
-          <b-form-select class="mb-2" ref="empresa" autocomplete="off" @change="listClientes">
-            <option :value="{}"></option>
-            <option v-for="empresa in empresaResponse" :key="empresa.idEmpresa" :value="novoCliente.idEmpresa">
-              {{ empresa.nomeFantasia }}
-            </option>
-          </b-form-select>
+          <b-form-select @change="empresaSelect" v-model="empresaSelected" :options="empresaResponse"
+            value-field="idEmpresa" text-field="nomeFantasia"></b-form-select>
         </b-card>
         <b-row>
           <b-col>
             <b-card>
               <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single"
-                selected-variant="primary" striped hover style="cursor: pointer">
+                selected-variant="primary" striped hover style="cursor: pointer" @row-selected="onRowSelected">
 
               </b-table>
             </b-card>
@@ -26,32 +22,24 @@
             <b-card>
               <b-form>
                 <b-form-group id="cpf-group" label="CPF" label-for="cpf">
-                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" type="number" required>
-                </b-form-input>
+                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" type="number" v-model="novoCliente.cpf" required>
+                  </b-form-input>
                 </b-form-group>
 
                 <b-form-group id="nome-group" label="Nome" label-for="nome">
-                  <b-form-input id="nome" placeholder="José Araujo" required>
-                </b-form-input>
+                  <b-form-input id="nome" placeholder="José Araujo" v-model="novoCliente.nome" required>
+                  </b-form-input>
                 </b-form-group>
 
                 <b-form-group id="telefone-group" label="Telefone" label-for="telefone">
-                  <b-form-input id="telefone" placeholder="(21) 99999-9999" type="number" required>
-                </b-form-input>
+                  <b-form-input id="telefone" placeholder="(21) 99999-9999" type="number" v-model="novoCliente.telefone" required>
+                  </b-form-input>
                 </b-form-group>
               </b-form>
             </b-card>
           </b-col>
         </b-row>
-        <StateButtonBar excluir excluirDisabled novo :novoFunction="novo" cancelar
-                            :cancelarFunction="cancelar" salvar :salvarFunction="salvarCliente" :oldObj="oldObj"
-                            :newObj="newObj" :camposObrigatorios="[ //n sei
-                                'cnpj',
-                                'nome-fantasia',
-                                'razao-social',
-                                'telefone',
-                                'responsavel',
-                            ]" />
+
       </div>
     </div>
   </div>
@@ -59,27 +47,35 @@
 
 
 <script>
-import StateButtonBar from "../../components/state-button-bar.vue"
 import PageHeader from "../../components/page-header.vue";
 import Main from "../../layout/main.vue";
 
 export default {
-  components: { PageHeader, Main, StateButtonBar },
+  components: { PageHeader, Main },
   data() {
     return {
       clienteResponse: [],
-      empresaResponse:[],
-      // Objeto da venda a ser salva
+      empresaResponse: [],
+      listaEmpresas: {
+        value: null,
+        text: null
+      },
       novoCliente: {
-        idEmpresa: null,
-        idCliente: null,
-        dataVenda: null,
-        metodoPagamento: null,
-        produtos: [],
-      }
+        nome: null,
+        cpf: null,
+        telefone: null,
+        idEmpresa: null
+      },
+      empresaSelected: 0
     }
   },
   methods: {
+    empresaSelect() {
+      console.log("metodo get clientes da empresa: " + this.empresaSelected);
+      this.getAllCliente();
+    },
+    onRowSelected() {
+     },
     // Método getAll Empresas
     async listEmpresas() {
       await this.$axios
@@ -91,21 +87,24 @@ export default {
           this.$toasted.error("Falha ao listar empresas!");
         });
     },
-    // Método getAll Clientes
-    async listClientes(idEmpresa) {
-      this.listProdutos(idEmpresa);
+    // Método get cliente da empresa
+    async getAllCliente() {
+      let empresa = this.empresaSelected;
       await this.$axios
-        .get(`dominios/empresa/${idEmpresa}/cliente`)
+        .get(`empresa/${empresa}/cliente`)
         .then((response) => {
-          this.clienteResponse = Object.assign([], response.data);
+          this.clienteResponse = Object.assign([], response.data.content);
+          console.log(this.clienteResponse);
         })
         .catch(() => {
-          this.$toasted.error("Falha ao listar clientes!");
+          this.$toasted.error("Falha ao listar os clientes dessa empresa!");
         });
+
     }
-    },
+  },
   mounted() {
     this.listEmpresas();
+    console.log(this.empresaResponse);
   }
 }
 </script>
