@@ -76,7 +76,7 @@
                         </b-card>
                         <b-row class="footer position-fixed d-flex justify-content-center  desktop-footer">
                             <b-col>
-                                <b-button variant="danger">Excluir</b-button>
+                                <b-button variant="danger" @click="excluir">Excluir</b-button>
                             </b-col>
                             <b-col class="d-flex justify-content-end">
                                 <div>
@@ -151,6 +151,10 @@ export default {
             //to do
             this.listEmpresas();
         },
+        excluir(){
+            this.delEmpresaById();
+            this.listEmpresas();
+        },
         // salvando empresa
         async newEmpresa() {
             let empresa = { ...this.novaEmpresa };
@@ -182,6 +186,21 @@ export default {
                 })
                 .catch(() => {
                 this.$toasted.error("Falha ao obter infornações da empresa!");
+                });
+
+               
+        },
+        // Método delById Empresa
+        async delEmpresaById() {
+            let empresa = this.empresaId;
+            await this.$axios
+                .delete(`empresa/${empresa}`)
+                .then((response) => {
+                this.novaEmpresa = Object.assign([], response.data);
+                this.$toasted.error("Empresa deletada com sucesso!");
+                })
+                .catch(() => {
+                this.$toasted.error("Falha ao deletar a empresa!");
                 });
 
                
