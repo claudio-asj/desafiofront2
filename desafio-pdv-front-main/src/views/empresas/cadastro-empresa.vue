@@ -8,7 +8,7 @@
                     <b-col>
                         <b-card>
                             <b-table class="mb-0 my-table" :items="empresaResponse" bordered selectable
-                                select-mode="single" selected-variant="primary" striped hover style="cursor: pointer">
+                                select-mode="single" selected-variant="primary" striped hover style="cursor: pointer" @row-selected="onRowSelected">
 
                             </b-table>
                             <div class="mt-2 d-flex" style="justify-content: space-between">
@@ -80,8 +80,8 @@
                             </b-col>
                             <b-col class="d-flex justify-content-end">
                                 <div>
-                                    <b-button class="mx-2" variant="outline-info">Novo</b-button>
-                                    <b-button class="mx-2" variant="outline-warning">Cancelar</b-button>
+                                    <b-button class="mx-2" variant="outline-info" @click="novo">Novo</b-button>
+                                    <b-button class="mx-2" variant="outline-warning" @click="cancelar">Cancelar</b-button>
                                     <b-button class="ml-2" variant="outline-success">Salvar</b-button>
                                 </div>
                             </b-col>
@@ -115,7 +115,9 @@ export default {
                 cnpj: null,
                 telefone: null,
                 responsavelLegal: null
-            }
+            },
+            selected: [],
+            idEmpresa: null,
         }
     },
     methods: {
@@ -131,10 +133,11 @@ export default {
                 });
         },
 
-        novo() {
-
+        novo() { //cria uma empresa
+            this.newEmpresa();
+            this.listEmpresas();
         },
-        cancelar() {
+        cancelar() { //limpa os inputs
             this.novaEmpresa = {
                 nomeFantasia: null,
                 razaoSocial: null,
@@ -142,9 +145,14 @@ export default {
                 telefone: null,
                 responsavelLegal: null
             }
+            this.listEmpresas();
+        },
+        salvar(){
+            //to do
+            this.listEmpresas();
         },
         // salvando empresa
-        async salvarEmpresa() {
+        async newEmpresa() {
             let empresa = { ...this.novaEmpresa };
 
             await this.$axios
@@ -159,10 +167,37 @@ export default {
                     console.log("nao foi");
                     console.log(this.novaEmpresa);
                 });
+                
+
+             this.listEmpresas();
+        },
+        // Método getById Empresa
+        async getEmpresaById() {
+            let empresa = this.empresaId;
+            await this.$axios
+                .get(`empresa/${empresa}`)
+                .then((response) => {
+                this.novaEmpresa = Object.assign([], response.data);
+                
+                })
+                .catch(() => {
+                this.$toasted.error("Falha ao obter infornações da empresa!");
+                });
+
+               
+        },
+        onRowSelected(empresaResponse) {
+            this.selected = empresaResponse;
+            let empresaId = this.selected[0].idEmpresa;
+            this.empresaId = empresaId;
+            this.getEmpresaById();
+            console.log(this.idEmpresa);
+
+
         }
     },
     mounted() {
-        this.listEmpresas()
+        this.listEmpresas();
     },
 
 }
