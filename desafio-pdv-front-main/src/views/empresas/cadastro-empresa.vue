@@ -82,7 +82,7 @@
                                 <div>
                                     <b-button class="mx-2" variant="outline-info" @click="novo">Novo</b-button>
                                     <b-button class="mx-2" variant="outline-warning" @click="cancelar">Cancelar</b-button>
-                                    <b-button class="ml-2" variant="outline-success">Salvar</b-button>
+                                    <b-button class="ml-2" variant="outline-success" @click="salvar" >Salvar</b-button>
                                 </div>
                             </b-col>
                         </b-row>
@@ -148,7 +148,7 @@ export default {
             this.listEmpresas();
         },
         salvar(){
-            //to do
+            this.putEmpresa();
             this.listEmpresas();
         },
         excluir(){
@@ -197,7 +197,7 @@ export default {
                 .delete(`empresa/${empresa}`)
                 .then((response) => {
                 this.novaEmpresa = Object.assign([], response.data);
-                this.$toasted.error("Empresa deletada com sucesso!");
+                this.$toasted.success("Empresa deletada com sucesso!");
                 })
                 .catch(() => {
                 this.$toasted.error("Falha ao deletar a empresa!");
@@ -205,14 +205,32 @@ export default {
 
                
         },
+        // Método Put
+        async putEmpresa() {
+            let empresa = { ...this.novaEmpresa };
+
+            await this.$axios
+                .put(`empresa`, empresa)
+                .then(() => {
+                    this.$toasted.success("Empresa editada com sucesso!");
+                    console.log("foi");
+                    this.cancelar();
+                })
+                .catch(() => {
+                    this.$toasted.error("Falha ao salvar empresa!");
+                    console.log("nao foi");
+                    console.log(empresa);
+                });
+                
+
+             this.listEmpresas();
+        },
         onRowSelected(empresaResponse) {
             this.selected = empresaResponse;
             let empresaId = this.selected[0].idEmpresa;
             this.empresaId = empresaId;
             this.getEmpresaById();
-            console.log(this.idEmpresa);
-
-
+            console.log("selected: "+this.empresaId);
         }
     },
     mounted() {
