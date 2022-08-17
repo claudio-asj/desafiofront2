@@ -8,7 +8,8 @@
                     <b-col>
                         <b-card>
                             <b-table class="mb-0 my-table" :items="empresaResponse" bordered selectable
-                                select-mode="single" selected-variant="primary" striped hover style="cursor: pointer" @row-selected="onRowSelected">
+                                select-mode="single" selected-variant="primary" striped hover style="cursor: pointer" :fields="fields"
+                                @row-selected="onRowSelected">
 
                             </b-table>
                             <div class="mt-2 d-flex" style="justify-content: space-between">
@@ -81,8 +82,9 @@
                             <b-col class="d-flex justify-content-end">
                                 <div>
                                     <b-button class="mx-2" variant="outline-info" @click="novo">Novo</b-button>
-                                    <b-button class="mx-2" variant="outline-warning" @click="cancelar">Cancelar</b-button>
-                                    <b-button class="ml-2" variant="outline-success" @click="salvar" >Salvar</b-button>
+                                    <b-button class="mx-2" variant="outline-warning" @click="cancelar">Cancelar
+                                    </b-button>
+                                    <b-button class="ml-2" variant="outline-success" @click="salvar">Salvar</b-button>
                                 </div>
                             </b-col>
                         </b-row>
@@ -118,6 +120,7 @@ export default {
             },
             selected: [],
             idEmpresa: null,
+            fields: ['nomeFantasia']
         }
     },
     methods: {
@@ -147,11 +150,11 @@ export default {
             }
             this.listEmpresas();
         },
-        salvar(){
+        salvar() {
             this.putEmpresa();
             this.listEmpresas();
         },
-        excluir(){
+        excluir() {
             this.delEmpresaById();
             this.listEmpresas();
         },
@@ -171,9 +174,9 @@ export default {
                     console.log("nao foi");
                     console.log(this.novaEmpresa);
                 });
-                
 
-             this.listEmpresas();
+
+            this.listEmpresas();
         },
         // Método getById Empresa
         async getEmpresaById() {
@@ -181,14 +184,14 @@ export default {
             await this.$axios
                 .get(`empresa/${empresa}`)
                 .then((response) => {
-                this.novaEmpresa = Object.assign([], response.data);
-                
+                    this.novaEmpresa = Object.assign([], response.data);
+
                 })
                 .catch(() => {
-                this.$toasted.error("Falha ao obter infornações da empresa!");
+                    this.$toasted.error("Falha ao obter infornações da empresa!");
                 });
 
-               
+
         },
         // Método delById Empresa
         async delEmpresaById() {
@@ -196,14 +199,14 @@ export default {
             await this.$axios
                 .delete(`empresa/${empresa}`)
                 .then((response) => {
-                this.novaEmpresa = Object.assign([], response.data);
-                this.$toasted.success("Empresa deletada com sucesso!");
+                    this.novaEmpresa = Object.assign([], response.data);
+                    this.$toasted.success("Empresa deletada com sucesso!");
                 })
                 .catch(() => {
-                this.$toasted.error("Falha ao deletar a empresa!");
+                    this.$toasted.error("Falha ao deletar a empresa!");
                 });
 
-               
+
         },
         // Método Put
         async putEmpresa() {
@@ -221,16 +224,16 @@ export default {
                     console.log("nao foi");
                     console.log(empresa);
                 });
-                
 
-             this.listEmpresas();
+
+            this.listEmpresas();
         },
         onRowSelected(empresaResponse) {
             this.selected = empresaResponse;
             let empresaId = this.selected[0].idEmpresa;
             this.empresaId = empresaId;
             this.getEmpresaById();
-            console.log("selected: "+this.empresaId);
+            console.log("selected: " + this.empresaId);
         }
     },
     mounted() {
