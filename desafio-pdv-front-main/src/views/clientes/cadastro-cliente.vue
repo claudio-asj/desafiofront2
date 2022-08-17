@@ -22,7 +22,8 @@
             <b-card>
               <b-form>
                 <b-form-group id="cpf-group" label="CPF" label-for="cpf">
-                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" type="number" v-model="novoCliente.cpf" required>
+                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" type="number" v-model="novoCliente.cpf"
+                    required>
                   </b-form-input>
                 </b-form-group>
 
@@ -32,11 +33,24 @@
                 </b-form-group>
 
                 <b-form-group id="telefone-group" label="Telefone" label-for="telefone">
-                  <b-form-input id="telefone" placeholder="(21) 99999-9999" type="number" v-model="novoCliente.telefone" required>
+                  <b-form-input id="telefone" placeholder="(21) 99999-9999" type="number" v-model="novoCliente.telefone"
+                    required>
                   </b-form-input>
                 </b-form-group>
               </b-form>
             </b-card>
+          </b-col>
+        </b-row>
+        <b-row class="footer position-fixed d-flex justify-content-center  desktop-footer">
+          <b-col>
+            <b-button variant="danger" @click="excluir">Excluir</b-button>
+          </b-col>
+          <b-col class="d-flex justify-content-end">
+            <div>
+              <b-button class="mx-2" variant="outline-info" @click="novo">Novo</b-button>
+              <b-button class="mx-2" variant="outline-warning" @click="cancelar">Cancelar</b-button>
+              <b-button class="ml-2" variant="outline-success" @click="salvar">Salvar</b-button>
+            </div>
           </b-col>
         </b-row>
 
@@ -78,9 +92,25 @@ export default {
     onRowSelected(clienteResponse) {
       this.selected = clienteResponse[0].idCliente;
       this.getCliente();
-      this.completaValores();
-     },
-    completaValores(){
+    },
+    novo() { //cria uma empresa
+      this.newCliente();
+    },
+    cancelar() { //limpa os inputs
+      this.novoCliente = {
+        nome: null,
+        cpf: null,
+        telefone: null,
+      }
+      this.getAllCliente();
+    },
+    salvar() {
+      this.putCliente();
+      this.getAllCliente();
+    },
+    excluir() {
+      this.delClienteById();
+      this.getAllCliente();
     },
     // Método getAll Empresas
     async listEmpresas() {
@@ -107,6 +137,24 @@ export default {
         });
 
     },
+    // salvando cliente
+    async newCliente() {
+      let empresa = this.empresaSelected;
+      this.novoCliente.idEmpresa = empresa;
+      let cliente = { ...this.novoCliente };
+      await this.$axios
+        .post(`empresa/${empresa}/cliente`, cliente)
+        .then(() => {
+          this.$toasted.success("Cliente salvo com sucesso!");
+          //console.log("foi");
+          this.cancelar();
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao salvar cliente!");
+          //console.log("nao foi");
+          console.log(this.novoCliente);
+        });
+    },
     //Método get Cliente
     async getCliente() {
       let empresa = this.empresaSelected;
@@ -119,11 +167,27 @@ export default {
         .catch(() => {
           this.$toasted.error("Falha ao listar os clientes dessa empresa!");
         });
-    }
+    },
+    //Método Delete
+    async delClienteById() {
+      let empresa = this.empresaSelected;
+      let cliente = this.selected;
+      await this.$axios
+        .delete(`empresa/${empresa}/cliente/${cliente}`)
+        .then((response) => {
+          this.$toasted.success("Empresa deletada com sucesso!");
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao deletar cliente!");
+          console.log(empresa);
+          console.log(cliente);
+        });
+
+
+    },
   },
   mounted() {
     this.listEmpresas();
-    console.log(this.empresaResponse);
   }
 }
 </script>
