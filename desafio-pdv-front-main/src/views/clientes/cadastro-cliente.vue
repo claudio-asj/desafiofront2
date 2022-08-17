@@ -70,10 +70,7 @@ export default {
     return {
       clienteResponse: [],
       empresaResponse: [],
-      listaEmpresas: {
-        value: null,
-        text: null
-      },
+      listaEmpresas: [],
       novoCliente: {
         nome: null,
         cpf: null,
@@ -183,8 +180,22 @@ export default {
           console.log(empresa);
           console.log(cliente);
         });
-
-
+    },
+      //Método Put
+    async putCliente() {
+      let empresa = this.empresaSelected;
+      let cliente = this.selected;
+      let clientePost = this.novoCliente;
+      delete clientePost.idCliente;
+      await this.$axios
+        .put(`empresa/${empresa}/cliente/${cliente}`, clientePost)
+        .then((response) => {
+          this.$toasted.success("Cliente atualizado com sucesso!");
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao atualizar cliente!");
+          console.log(clientePost);
+        });
     },
   },
   mounted() {

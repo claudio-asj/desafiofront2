@@ -13,33 +13,53 @@
         <b-row>
           <b-col>
             <b-card>
-              <b-table class="mb-0 my-table" :items="produtoResponse" bordered selectable select-mode="single" :fields="fields"
-                selected-variant="primary" striped hover style="cursor: pointer" @row-selected="onRowSelected">
+              <b-table class="mb-0 my-table" :items="produtoResponse" bordered selectable select-mode="single"
+                :fields="fields" selected-variant="primary" striped hover style="cursor: pointer"
+                @row-selected="onRowSelected">
               </b-table>
             </b-card>
           </b-col>
           <b-col>
             <b-card>
               <b-form>
+                <!-- <b-form-group id="produto-group" label="Imagem" label-for="imagem">
+                  <b-form-file id="imagem" v-model="novoProduto.imagemProduto" plain></b-form-file>
+                  <b-card v-if="this.novoProduto.imagemProduto">
+                    <img :src="`data:image/jpeg;base64,${this.novoProduto.imagemProduto}`" alt="" />
+                  </b-card>
+                </b-form-group> -->
                 <b-form-group id="produto-group" label="Produto" label-for="produto">
                   <b-form-input id="produto" v-model="novoProduto.produto" placeholder="Iphone 13" required>
                   </b-form-input>
                 </b-form-group>
 
                 <b-form-group id="descricao-group" label="Descrição" label-for="d">
-                  <b-form-textarea id="descricao" v-model="novoProduto.descricao" placeholder="..." rows="3" max-rows="6">
+                  <b-form-textarea id="descricao" v-model="novoProduto.descricao" placeholder="..." rows="3"
+                    max-rows="6">
                   </b-form-textarea>
                 </b-form-group>
 
                 <b-form-group id="valor-group" label="Valor" label-for="valor">
-                  <b-form-input id="valor" v-model="novoProduto.valorBase" placeholder="90000" novo type="number" required>
+                  <b-form-input id="valor" v-model="novoProduto.valorBase" placeholder="90000" novo type="number"
+                    required>
                   </b-form-input>
                 </b-form-group>
               </b-form>
             </b-card>
           </b-col>
         </b-row>
-
+        <b-row class="footer position-fixed d-flex justify-content-center  desktop-footer">
+          <b-col>
+            <b-button variant="danger" @click="excluir">Excluir</b-button>
+          </b-col>
+          <b-col class="d-flex justify-content-end">
+            <div>
+              <b-button class="mx-2" variant="outline-info" @click="novo">Novo</b-button>
+              <b-button class="mx-2" variant="outline-warning" @click="cancelar">Cancelar</b-button>
+              <b-button class="ml-2" variant="outline-success" @click="salvar">Salvar</b-button>
+            </div>
+          </b-col>
+        </b-row>
       </div>
     </div>
   </div>
@@ -58,22 +78,44 @@ export default {
       produtoResponse: [],
       // Objeto da venda a ser salva
       novoProduto: {
-        prdouto: null,
+        produto: null,
         descricao: null,
         valorBase: null,
         imagemProduto: null,
         idEmpresa: null
       },
       empresaSelected: null,
-      fields: [ 'produto']
+      fields: ['produto'],
+      selected: null
     }
   },
   methods: {
     empresaSelect() {
       this.getAllProdutos();
     },
-    onRowSelected(){
+    onRowSelected(produtoResponse) {
+      this.selected = produtoResponse[0].idProduto;
+      this.getProduto();
+    },
+    excluir() {
 
+    },
+    novo() {
+      this.postProduto();
+      this.cancelar();
+    },
+    cancelar() {
+      this.novoProduto = {
+        produto: null,
+        descricao: null,
+        valorBase: null,
+        imagemProduto: null,
+        idEmpresa: null
+      }
+    },
+    salvar() {
+      this.putProduto();
+      this.cancelar();
     },
     // Método getAll Empresas
     async listEmpresas() {
@@ -95,12 +137,60 @@ export default {
         .then((response) => {
           this.produtoResponse = Object.assign([], response.data.content);
           this.$toasted.success("Listando produtos da empresa!");
-          
+
         })
         .catch(() => {
           this.$toasted.error("Falha ao listar os produto dessa empresa!");
         });
+    },
+    //Método get Produto
+    async getProduto() {
+      let empresa = this.empresaSelected;
+      let produto = this.selected;
+      console.log(produto)
+      await this.$axios
+        .get(`empresa/${empresa}/produto/${produto}`)
+        .then((response) => {
+          this.novoProduto = Object.assign([], response.data);
+          this.$toasted.success("Produto carregado!");
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao carregar Produto!");
+        });
+    },
 
+    //Método Put
+    async putProduto() {
+      let empresa = this.empresaSelected;
+      let produto = this.selected;
+      let produtoPost = { ...this.novoProduto };
+
+      delete produtoPost.idProduto;
+      await this.$axios
+        .put(`empresa/${empresa}/produto/${produto}`, produtoPost)
+        .then((response) => {
+          this.$toasted.success("Produto atualizado com sucesso!");
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao atualizar produto!");
+          console.log(produtoPost);
+        });
+    },
+    //Método Post
+    async postProduto() {
+      let empresa = this.empresaSelected;
+      let produtoPost = { ...this.novoProduto };
+      produtoPost.idEmpresa = empresa;
+      delete produtoPost.idCliente;
+      await this.$axios
+        .put(`empresa/${empresa}/produto`, produtoPost)
+        .then((response) => {
+          this.$toasted.success("Produto cadastrado com sucesso!");
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao cadastrar produto!");
+          console.log(produtoPost);
+        });
     },
   },
   mounted() {
