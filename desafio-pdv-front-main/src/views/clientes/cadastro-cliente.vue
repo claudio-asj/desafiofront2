@@ -66,16 +66,22 @@ export default {
         telefone: null,
         idEmpresa: null
       },
-      empresaSelected: 0
+      clienteSelected: {},
+      empresaSelected: 0,
+      selected: null
     }
   },
   methods: {
     empresaSelect() {
-      console.log("metodo get clientes da empresa: " + this.empresaSelected);
       this.getAllCliente();
     },
-    onRowSelected() {
+    onRowSelected(clienteResponse) {
+      this.selected = clienteResponse[0].idCliente;
+      this.getCliente();
+      this.completaValores();
      },
+    completaValores(){
+    },
     // Método getAll Empresas
     async listEmpresas() {
       await this.$axios
@@ -100,6 +106,19 @@ export default {
           this.$toasted.error("Falha ao listar os clientes dessa empresa!");
         });
 
+    },
+    //Método get Cliente
+    async getCliente() {
+      let empresa = this.empresaSelected;
+      let cliente = this.selected;
+      await this.$axios
+        .get(`empresa/${empresa}/cliente/${cliente}`)
+        .then((response) => {
+          this.novoCliente = Object.assign([], response.data);
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao listar os clientes dessa empresa!");
+        });
     }
   },
   mounted() {
