@@ -22,12 +22,15 @@
           <b-col>
             <b-card>
               <b-form>
-                <!-- <b-form-group id="produto-group" label="Imagem" label-for="imagem">
-                  <b-form-file id="imagem" v-model="novoProduto.imagemProduto" plain></b-form-file>
+                <b-form-group id="produto-group" label="Imagem" label-for="imagem">
+
                   <b-card v-if="this.novoProduto.imagemProduto">
-                    <img :src="`data:image/jpeg;base64,${this.novoProduto.imagemProduto}`" alt="" />
+                    <img :src="`data:image/jpeg;base64,${this.novoProduto.imagemProduto}`" alt=""
+                      class="imagem-produto" />
                   </b-card>
-                </b-form-group> -->
+                  <!-- <b-form-file v-else id="imagem" v-model="novoProduto.imagemProduto" plain @input="traduzirImg"></b-form-file> -->
+                  <input @change="uploadImage" type="file" name="photo" accept="image/*">
+                </b-form-group>
                 <b-form-group id="produto-group" label="Produto" label-for="produto">
                   <b-form-input id="produto" v-model="novoProduto.produto" placeholder="Iphone 13" required>
                   </b-form-input>
@@ -69,9 +72,11 @@
 <script>
 import PageHeader from "../../components/page-header.vue";
 import Main from "../../layout/main.vue";
+import VueBase64FileUpload from 'vue-base64-file-upload';
+
 
 export default {
-  components: { PageHeader, Main },
+  components: { PageHeader, Main, VueBase64FileUpload},
   data() {
     return {
       empresaResponse: [],
@@ -86,7 +91,8 @@ export default {
       },
       empresaSelected: null,
       fields: ['produto'],
-      selected: null
+      selected: null,
+      imgBase: null
     }
   },
   methods: {
@@ -164,7 +170,7 @@ export default {
       let empresa = this.empresaSelected;
       let produto = this.selected;
       let produtoPost = { ...this.novoProduto };
-
+      produtoPost.imagemProduto = this.imgBase;
       delete produtoPost.idProduto;
       await this.$axios
         .put(`empresa/${empresa}/produto/${produto}`, produtoPost)
@@ -181,6 +187,7 @@ export default {
       let empresa = this.empresaSelected;
       let produtoPost = { ...this.novoProduto };
       produtoPost.idEmpresa = empresa;
+      produtoPost.imagemProduto = this.imgBase;
       delete produtoPost.idCliente;
       await this.$axios
         .put(`empresa/${empresa}/produto`, produtoPost)
@@ -192,9 +199,34 @@ export default {
           console.log(produtoPost);
         });
     },
+    //converter img para base64
+    uploadImage() {    
+      let file = document
+        .querySelector('input[type=file]')
+        .files[0];
+      let reader = new FileReader();
+      let base;
+      reader.onload = (e) => {
+        base = e.target.result;
+        this.imgBase = base;
+        console.log(base)
+      };
+      reader.onerror = function(error) {
+        alert(error);
+      };
+      
+      reader.readAsDataURL(file); 
+    },
   },
   mounted() {
     this.listEmpresas();
   }
 }
 </script>
+
+<style>
+.imagem-produto {
+  width: 16rem;
+  background-color: blue;
+}
+</style>
