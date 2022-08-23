@@ -12,8 +12,9 @@
         <b-row>
           <b-col>
             <b-card>
-              <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single" :fields="fields"
-                selected-variant="primary" striped hover style="cursor: pointer" @row-selected="onRowSelected">
+              <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single"
+                :fields="fields" selected-variant="primary" striped hover style="cursor: pointer"
+                @row-selected="onRowSelected">
 
               </b-table>
             </b-card>
@@ -22,8 +23,8 @@
             <b-card>
               <b-form>
                 <b-form-group id="cpf-group" label="CPF" label-for="cpf">
-                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" type="number" v-model="novoCliente.cpf"
-                    required>
+                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" v-model="novoCliente.cpf"
+                    required >
                   </b-form-input>
                 </b-form-group>
 
@@ -41,7 +42,7 @@
             </b-card>
           </b-col>
         </b-row>
-        <b-row class="footer position-fixed d-flex justify-content-center  desktop-footer">
+        <b-row class="footer position-fixed d-flex justify-content-center desktop-footer">
           <b-col>
             <b-button variant="danger" @click="excluir">Excluir</b-button>
           </b-col>
@@ -80,7 +81,7 @@ export default {
       clienteSelected: {},
       empresaSelected: 0,
       selected: null,
-      fields: [ 'cpf','nome']
+      fields: ['cpf', 'nome'],
     }
   },
   methods: {
@@ -93,6 +94,7 @@ export default {
     },
     novo() { //cria uma empresa
       this.newCliente();
+
     },
     cancelar() { //limpa os inputs
       this.novoCliente = {
@@ -103,6 +105,7 @@ export default {
       this.getAllCliente();
     },
     salvar() {
+      this.cpfState();
       this.putCliente();
       this.getAllCliente();
     },
@@ -140,6 +143,7 @@ export default {
       let empresa = this.empresaSelected;
       this.novoCliente.idEmpresa = empresa;
       let cliente = { ...this.novoCliente };
+      delete cliente.idCliente;
       await this.$axios
         .post(`empresa/${empresa}/cliente`, cliente)
         .then(() => {
@@ -150,7 +154,7 @@ export default {
         .catch(() => {
           this.$toasted.error("Falha ao salvar cliente!");
           //console.log("nao foi");
-          console.log(this.novoCliente);
+          console.log(cliente);
         });
     },
     //Método get Cliente
@@ -181,11 +185,11 @@ export default {
           console.log(cliente);
         });
     },
-      //Método Put
+    //Método Put
     async putCliente() {
       let empresa = this.empresaSelected;
       let cliente = this.selected;
-      let clientePost = this.novoCliente;
+      let clientePost = { ...this.novoCliente };
       delete clientePost.idCliente;
       await this.$axios
         .put(`empresa/${empresa}/cliente/${cliente}`, clientePost)

@@ -130,6 +130,7 @@ export default {
                 .get("dominios/empresa")
                 .then((response) => {
                     this.empresaResponse = Object.assign([], response.data);
+                    this.$toasted.success("Empresas listadas com sucesso!");
                 })
                 .catch(() => {
                     this.$toasted.error("Falha ao listar empresas!");
@@ -184,6 +185,7 @@ export default {
             await this.$axios
                 .get(`empresa/${empresa}`)
                 .then((response) => {
+                    this.$toasted.success("empresa carregada com sucesso!");
                     this.novaEmpresa = Object.assign([], response.data);
 
                 })
