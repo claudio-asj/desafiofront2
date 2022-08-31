@@ -12,7 +12,7 @@
         <b-row>
           <b-col>
             <b-card>
-              <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single"
+           <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single"
                 :fields="fields" selected-variant="primary" striped hover style="cursor: pointer"
                 @row-selected="onRowSelected">
 

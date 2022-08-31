@@ -215,7 +215,7 @@ export default {
             let empresa = { ...this.novaEmpresa };
 
             await this.$axios
-                .put(`empresa`, empresa)
+                .put(`empresa/${this.empresaId}`, empresa)
                 .then(() => {
                     this.$toasted.success("Empresa editada com sucesso!");
                     console.log("foi");
