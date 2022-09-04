@@ -24,11 +24,11 @@
               <b-form>
                 <b-form-group id="produto-group" label="Imagem" label-for="imagem">
 
-                  <b-card v-if="this.novoProduto.imagemProduto">
+                  <b-card >
                     <img :src="`data:image/jpeg;base64,${this.novoProduto.imagemProduto}`" alt=""
                       class="imagem-produto" />
                   </b-card>
-                  <!-- <b-form-file v-else id="imagem" v-model="novoProduto.imagemProduto" plain @input="traduzirImg"></b-form-file> -->
+                
                   <input @change="uploadImage" type="file" name="photo" accept="image/*">
                 </b-form-group>
                 <b-form-group id="produto-group" label="Produto" label-for="produto">
@@ -104,7 +104,8 @@ export default {
       this.getProduto();
     },
     excluir() {
-
+      this.deletePrudutoById();
+      this.cancelar();
     },
     novo() {
       this.postProduto();
@@ -141,7 +142,7 @@ export default {
       await this.$axios
         .get(`empresa/${empresa}/produto`)
         .then((response) => {
-          this.produtoResponse = Object.assign([], response.data.content);
+          this.produtoResponse = Object.assign([], response.data);
           this.$toasted.success("Listando produtos da empresa!");
 
         })
@@ -169,13 +170,12 @@ export default {
     async putProduto() {
       let empresa = this.empresaSelected;
       let produto = this.selected;
-      let produtoPost = { ...this.novoProduto };
-      produtoPost.imagemProduto = this.imgBase;
-      delete produtoPost.idProduto;
+      let produtoPut = { ...this.novoProduto };
       await this.$axios
-        .put(`empresa/${empresa}/produto/${produto}`, produtoPost)
-        .then((response) => {
+        .put(`empresa/${empresa}/produto/${produto}`, produtoPut)
+        .then(() => {
           this.$toasted.success("Produto atualizado com sucesso!");
+          this.listEmpresas();
         })
         .catch(() => {
           this.$toasted.error("Falha ao atualizar produto!");
@@ -184,20 +184,35 @@ export default {
     },
     //Método Post
     async postProduto() {
-      let empresa = this.empresaSelected;
       let produtoPost = { ...this.novoProduto };
+      let empresa = this.empresaSelected;
       produtoPost.idEmpresa = empresa;
-      produtoPost.imagemProduto = this.imgBase;
-      delete produtoPost.idCliente;
+      produtoPost.imagemProduto = this.imgBase.substr(23);//returar o inico da string
+      console.log(produtoPost);
       await this.$axios
-        .put(`empresa/${empresa}/produto`, produtoPost)
-        .then((response) => {
+        .post(`empresa/${empresa}/produto`, produtoPost)
+        .then(() => {
           this.$toasted.success("Produto cadastrado com sucesso!");
+          this.getProduto();
         })
         .catch(() => {
           this.$toasted.error("Falha ao cadastrar produto!");
           console.log(produtoPost);
         });
+    },
+    //
+    async deletePrudutoById(){
+      let empresa = this.empresaSelected;
+      let produto = this.selected;
+            await this.$axios
+                .delete(`empresa/${empresa}/produto/${produto}`)
+                .then(() => {
+                    this.$toasted.success("Produto deletado com sucesso!");
+                    this.getProduto();
+                })
+                .catch(() => {
+                    this.$toasted.error("Falha ao deletar o produto!");
+                });
     },
     //converter img para base64
     uploadImage() {    

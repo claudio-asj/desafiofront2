@@ -405,7 +405,7 @@ export default {
       this.changeLoading(true);
       this.listProdutos(idEmpresa);
       await this.$axios
-        .get(`dominios/empresa/${idEmpresa}/cliente`)
+        .get(`empresa/${idEmpresa}/cliente`)
         .then((response) => {
           this.clienteResponse = Object.assign([], response.data);
         })
@@ -420,7 +420,7 @@ export default {
       this.changeLoading(true);
       this.cleanForm();
       await this.$axios
-        .get(`dominios/empresa/${idEmpresa}/produto`)
+        .get(`empresa/${idEmpresa}/produto`)
         .then((response) => {
           this.produtoResponse = Object.assign([], response.data);
         })

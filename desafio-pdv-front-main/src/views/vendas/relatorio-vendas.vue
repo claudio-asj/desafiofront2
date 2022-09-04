@@ -1,297 +1,155 @@
 <template>
   <div>
-    <Layout />
+    <Main />
     <div class="page-container">
-      <PageHeader
-        title="Relatório de Vendas"
-        helpTitle="Relatório de Vendas"
-        :helpText="helpText"
-      />
+      <PageHeader title="Relatório de vendas" />
       <div class="my-container">
         <b-card>
-          <b-card-title>Filtros</b-card-title>
           <b-row>
-            <b-col class="col-12 col-md-6 col-lg-4">
+            <b-col>
               <label for="empresa">Empresa</label>
-              <b-form-select
-                class="mb-2"
-                ref="empresa"
-                id="empresa"
-                @change="listVendas"
-                v-model="idEmpresa"
-                autocomplete="off"
-              >
-                <option :value="null"></option>
-                <option
-                  v-for="empresa in empresaResponse"
-                  :key="empresa.idEmpresa"
-                  :value="empresa.idEmpresa"
-                >
-                  {{ empresa.nomeFantasia }}
-                </option>
-              </b-form-select>
+              <b-form-select @change="empresaSelect" v-model="empresaSelected" :options="empresaResponse"
+                value-field="idEmpresa" text-field="nomeFantasia"></b-form-select>
             </b-col>
-            <b-col class="col-12 col-md-6 col-lg-4">
+            <b-col>
               <label for="cliente">Cliente</label>
-              <b-form-select
-                class="mb-2"
-                ref="cliente"
-                id="cliente"
-                v-model="nomeCliente"
-                autocomplete="off"
-              >
-                <option :value="null"></option>
-                <option
-                  v-for="(cliente, index) in clienteOptions"
-                  :key="index"
-                  :value="cliente"
-                >
-                  {{ cliente }}
-                </option>
-              </b-form-select>
+              <b-form-select @change="clienteSelect" v-model="clienteSelected" :options="clienteResponse"
+                value-field="idCliente" text-field="nome"></b-form-select>
             </b-col>
-            <b-col class="col-12 col-lg-4">
-              <label for="data">Data da Venda</label>
-              <b-form-select
-                class="mb-2"
-                ref="cliente"
-                id="cliente"
-                v-model="dataVenda"
-                autocomplete="off"
-              >
-                <option :value="null"></option>
-                <option
-                  v-for="(dataVenda, index) in dataVendaOptions"
-                  :key="index"
-                  :value="dataVenda"
-                >
-                  {{ dataVenda }}
-                </option>
-              </b-form-select>
+            <b-col>
+              <label for="empresa">Data da Venda</label>
+              <b-form-select></b-form-select>
             </b-col>
           </b-row>
         </b-card>
-
         <b-card>
-          <b-table
-            class="mb-0 my-table"
-            sticky-header
-            :items="vendasItems"
-            :fields="fields"
-            responsive="sm"
-            :per-page="perPage"
-            :sort-by.sync="sortBy"
-            :sort-desc.sync="sortDesc"
-            @row-clicked="myRowClicked"
-            ref="mytable"
-            :busy="isBusy"
-            bordered
-            selectable
-            select-mode="single"
-            selected-variant="primary"
-            striped
-            hover
-            style="cursor: pointer"
-          >
-            <template #table-busy>
-              <div class="text-center text-primary my-2">
-                <b-spinner small class="align-middle mr-2"></b-spinner>
-                <strong>Carregando...</strong>
-              </div>
-            </template>
+
+          <b-table class="mb-0 my-table" sticky-header :items="vendaResponse" :fields="fields" responsive="sm"
+            bordered selectable select-mode="single" selected-variant="primary" stripedhover style="cursor: pointer"
+            @row-selected="onRowSelected">
+            
             <template #cell(dataVenda)="data">
               {{
-                data.item.dataVenda.split(" ")[0].split("-").reverse().join("/")
+                  data.item.dataVenda.split(" ")[0].split("-").join("/")
               }}
             </template>
             <template #cell(valorTotal)="data">
-              R$ {{ data.item.valorTotal.toFixed(2).replace(".", ",") }}
+              R$ {{ data.item.valorTotal }}
             </template>
           </b-table>
-          <div class="mt-2">Total de registros: {{ rows }}</div>
-          <hr />
-          <div class="d-flex align-items-center justify-content-center">
-            <ul class="pagination mb-0">
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-                :disabled="!Boolean(rows)"
-              >
-                <template>
-                  <div slot="first-text">
-                    <i class="fas fa-angle-double-left"></i>
-                  </div>
-                  <div slot="prev-text">
-                    <i class="fas fa-angle-left"></i>
-                  </div>
-                  <div slot="next-text">
-                    <i class="fas fa-angle-right"></i>
-                  </div>
-                  <div slot="last-text">
-                    <i class="fas fa-angle-double-right"></i>
-                  </div>
-                </template>
-              </b-pagination>
-            </ul>
-          </div>
+          <div class="mt-2">Total de registros: {{ vendaResponse.length }}</div>
         </b-card>
       </div>
+      <b-row class="footer position-fixed d-flex justify-content-center desktop-footer">
+          <b-col>
+            <b-button variant="danger" @click="excluir">Excluir</b-button>
+          </b-col>
+        </b-row>
     </div>
   </div>
 </template>
 
 <script>
-import PageHeader from "@/components/page-header";
-import Layout from "@/layout/main";
-import { mapActions } from "vuex";
+import PageHeader from "../../components/page-header.vue";
+import Main from "../../layout/main.vue";
 
 export default {
-  components: {
-    PageHeader,
-    Layout,
-  },
-
-  mounted() {
-    this.listEmpresas();
-  },
-
+  components: { PageHeader, Main },
   data() {
     return {
-      novoItem: {
-        idProduto: null,
-        produto: null,
-        quantidade: null,
-        valorBase: null,
-      },
-
-      idEmpresa: null,
-      nomeCliente: null,
-      dataVenda: null,
-      vendaSelected: {},
-
+      empresaSelected: null,
       empresaResponse: [],
-      vendaResponse: { content: [] },
-
-      editMode: false,
-
+      clienteSelected: null,
+      clienteResponse: [],
+      dataSelected: null,
+      dataResponse: [],
+      vendaResponse: {},
       fields: [
-        { key: "empresa", label: "Empresa" },
-        { key: "cliente", label: "Cliente" },
+        { key: "nomeFantasia", label: "Empresa" },
+        { key: "nomeCliente", label: "Cliente" },
         { key: "dataVenda", label: "Data da Venda" },
         { key: "valorTotal", label: "Valor Total" },
       ],
-      isBusy: false,
-      currentPage: 1,
-      perPage: 5,
-      sortBy: "dataVenda",
-      sortDesc: false,
-    };
+      nomeCliente: null,
+      vendaSelected: null
+    }
   },
-
-  watch: {
-    currentPage: function (novo) {
-      this.listVendas(this.idEmpresa, novo - 1);
-    },
+  mounted() {
+    this.listEmpresas();
   },
-
-  computed: {   
-    helpText() {
-      return `
-      <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-          praesentium repudiandae asperiores voluptatem consequatur harum,
-          voluptate nulla.
-      </p>
-      <p>
-          Quis consectetur accusantium quia consequuntur hic
-          soluta. Minus nisi illum ab architecto exercitationem?
-      </p>    
-      `;
-    },
-
-    vendasItems() {
-      let items = Object.assign([], this.vendaResponse.content);
-      if (this.dataVenda) {
-        items = items.filter(
-          (v) =>
-            v.dataVenda.split(" ")[0].split("-").reverse().join("/") ===
-            this.dataVenda.split(" ")[0].split("-").reverse().join("/")
-        );
-      }
-      if (this.nomeCliente) {
-        items = items.filter((v) => v.cliente === this.nomeCliente);
-      }
-      return items;
-    },
-
-    clienteOptions() {
-      return new Set(this.vendaResponse.content.map((v) => v.cliente));
-    },
-
-    dataVendaOptions() {
-      return new Set(
-        this.vendaResponse.content.map((v) =>
-          v.dataVenda.split(" ")[0].split("-").reverse().join("/")
-        )
-      );
-    },
-
-    rows() {
-      return this.vendaResponse.totalElements;
-    },
-  },
-
   methods: {
-    ...mapActions({
-      changeLoading: "changeLoading",
-    }),
-
     async listEmpresas() {
-      this.changeLoading(true);
       await this.$axios
         .get("dominios/empresa")
         .then((response) => {
           this.empresaResponse = Object.assign([], response.data);
+          this.$toasted.success("Empresas carregadas com sucesso!");
         })
         .catch(() => {
           this.$toasted.error("Falha ao listar empresas!");
         });
-      this.changeLoading(false);
     },
-
-    async listVendas(idEmpresa, page) {
-      this.cleanForm();
-      if (idEmpresa) {
-        this.isBusy = true;
-        await this.$axios
-          .get(`empresa/${idEmpresa}/venda`, { page })
-          .then((response) => {
-            this.vendaResponse = Object.assign({}, response.data);
-          })
-          .catch(() => {
-            this.$toasted.error("Falha ao listar vendas!");
-          });
-        this.isBusy = false;
-      }
+    empresaSelect() {
+      this.getAllCliente();
+      this.getVenda();
+      
     },
-
-    myRowClicked(record) {
-      this.$router
-        .push({
-          name: "detalhe-venda",
-          params: { idEmpresa: record.idEmpresa, idVenda: record.idVenda },
+    clienteSelect(){
+      
+    },
+    excluir(){
+      this.delClienteById();
+    },
+    // Método get cliente da empresa
+    async getAllCliente() {
+      let empresa = this.empresaSelected;
+      await this.$axios
+        .get(`empresa/${empresa}/cliente`)
+        .then((response) => {
+          this.clienteResponse = Object.assign([], response.data);
+          this.$toasted.success("Clientes carregados com sucesso!");
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toasted.error("Falha ao listar os clientes dessa empresa!");
+        });
     },
+    // Método get venda da empresa
+    async getVenda() {
+      let empresa = this.empresaSelected;
+      await this.$axios
+        .get(`empresa/${empresa}/venda`)
+        .then((response) => {
+          this.vendaResponse = Object.assign([], response.data);
+          this.$toasted.success("Vendas carregadas com sucesso!");
+          console.log(this.vendaResponse);
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao listar as vendas dessa empresa!");
+        });
+    },
+    //Método Delete
+    async delClienteById() {
+      let empresa = this.empresaSelected;
+      let venda = this.vendaSelected;
+      await this.$axios
+        .delete(`empresa/${empresa}/venda/${venda}`)
+        .then(() => {
+          this.$toasted.success("Venda deletada com sucesso!");
+        })
+        .catch(() => {
+          this.$toasted.error("Falha ao deletar venda!");
+          console.log(empresa);
+          console.log(venda);
+        });
+    },
+    onRowSelected(vendaResponse) {
+      this.vendaSelected = vendaResponse[0].idVenda;
+      console.log(this.vendaSelected)
+    },
+    
+  }
 
-    cleanForm() {
-      this.vendaResponse = { content: [] };
-      this.nomeCliente = null;
-      this.dataVenda = null;
-    },
-  },
-};
+}
 </script>
 
 <style scoped>

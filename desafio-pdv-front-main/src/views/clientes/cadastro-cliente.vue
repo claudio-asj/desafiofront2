@@ -12,7 +12,7 @@
         <b-row>
           <b-col>
             <b-card>
-           <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single"
+              <b-table class="mb-0 my-table" :items="clienteResponse" bordered selectable select-mode="single"
                 :fields="fields" selected-variant="primary" striped hover style="cursor: pointer"
                 @row-selected="onRowSelected">
 
@@ -23,8 +23,7 @@
             <b-card>
               <b-form>
                 <b-form-group id="cpf-group" label="CPF" label-for="cpf">
-                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" v-model="novoCliente.cpf"
-                    required >
+                  <b-form-input id="cpf" placeholder="34.916.315/0001-03" v-model="novoCliente.cpf" required>
                   </b-form-input>
                 </b-form-group>
 
@@ -94,6 +93,8 @@ export default {
     },
     novo() { //cria uma empresa
       this.newCliente();
+      this.getAllCliente();
+      this.cancelar();
 
     },
     cancelar() { //limpa os inputs
@@ -105,13 +106,14 @@ export default {
       this.getAllCliente();
     },
     salvar() {
-      this.cpfState();
       this.putCliente();
       this.getAllCliente();
+      this.cancelar();
     },
     excluir() {
       this.delClienteById();
       this.getAllCliente();
+      this.cancelar();
     },
     // Método getAll Empresas
     async listEmpresas() {
@@ -130,8 +132,7 @@ export default {
       await this.$axios
         .get(`empresa/${empresa}/cliente`)
         .then((response) => {
-          this.clienteResponse = Object.assign([], response.data.content);
-          console.log(this.clienteResponse);
+          this.clienteResponse = Object.assign([], response.data);
         })
         .catch(() => {
           this.$toasted.error("Falha ao listar os clientes dessa empresa!");
@@ -155,8 +156,8 @@ export default {
           this.$toasted.error("Falha ao salvar cliente!");
           //console.log("nao foi");
           console.log(cliente);
-        });
-    },
+        });7 
+    },7 
     //Método get Cliente
     async getCliente() {
       let empresa = this.empresaSelected;
@@ -165,9 +166,10 @@ export default {
         .get(`empresa/${empresa}/cliente/${cliente}`)
         .then((response) => {
           this.novoCliente = Object.assign([], response.data);
+          this.$toasted.success("Cliente cadastrado com sucesso!");
         })
         .catch(() => {
-          this.$toasted.error("Falha ao listar os clientes dessa empresa!");
+          this.$toasted.error("Falha ao carregar esse cliente!");
         });
     },
     //Método Delete
@@ -176,8 +178,8 @@ export default {
       let cliente = this.selected;
       await this.$axios
         .delete(`empresa/${empresa}/cliente/${cliente}`)
-        .then((response) => {
-          this.$toasted.success("Empresa deletada com sucesso!");
+        .then(() => {
+          this.$toasted.success("Cliente deletado com sucesso!");
         })
         .catch(() => {
           this.$toasted.error("Falha ao deletar cliente!");
@@ -190,10 +192,11 @@ export default {
       let empresa = this.empresaSelected;
       let cliente = this.selected;
       let clientePost = { ...this.novoCliente };
+      clientePost.idEmpresa = empresa
       delete clientePost.idCliente;
       await this.$axios
         .put(`empresa/${empresa}/cliente/${cliente}`, clientePost)
-        .then((response) => {
+        .then(() => {
           this.$toasted.success("Cliente atualizado com sucesso!");
         })
         .catch(() => {

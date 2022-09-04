@@ -68,7 +68,7 @@
                                         <b-form-group id="responsavel-group" label="Responsável Legal:"
                                             label-for="responsavel">
                                             <b-form-input id="Responsavel" placeholder="Joao da Silva" required
-                                                v-model="novaEmpresa.responsavelLegal">
+                                                v-model="novaEmpresa.responsaveLegal">
                                             </b-form-input>
                                         </b-form-group>
                                     </b-col>
