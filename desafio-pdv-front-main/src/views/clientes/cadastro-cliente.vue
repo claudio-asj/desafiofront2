@@ -156,8 +156,8 @@ export default {
           this.$toasted.error("Falha ao salvar cliente!");
           //console.log("nao foi");
           console.log(cliente);
-        });7 
-    },7 
+        });
+    },
     //Método get Cliente
     async getCliente() {
       let empresa = this.empresaSelected;

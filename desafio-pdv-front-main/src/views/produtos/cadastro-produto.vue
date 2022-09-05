@@ -171,6 +171,8 @@ export default {
       let empresa = this.empresaSelected;
       let produto = this.selected;
       let produtoPut = { ...this.novoProduto };
+      produtoPut.imagemProduto = this.imgBase.substr(23);//retirar o inico da string
+      delete produtoPut.idProduto;
       await this.$axios
         .put(`empresa/${empresa}/produto/${produto}`, produtoPut)
         .then(() => {
@@ -187,8 +189,7 @@ export default {
       let produtoPost = { ...this.novoProduto };
       let empresa = this.empresaSelected;
       produtoPost.idEmpresa = empresa;
-      produtoPost.imagemProduto = this.imgBase.substr(23);//returar o inico da string
-      console.log(produtoPost);
+      produtoPost.imagemProduto = this.imgBase.substr(23);//retirar o inico da string
       await this.$axios
         .post(`empresa/${empresa}/produto`, produtoPost)
         .then(() => {
